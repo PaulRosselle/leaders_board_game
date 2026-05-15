@@ -48,6 +48,9 @@ public static class CardKindMethods
         _ => throw new InvalidOperationException($"No ability kinds found for card kind {cardKind}"),
     };
 
+    /// <summary>
+    /// Get the leaderKind associated with the card. Returns null if there is none
+    /// </summary>
     public static LeaderKind? GetLeaderKind(this CardKind cardKind) => cardKind switch
     {
         CardKind.LeaderKing => LeaderKind.King,
