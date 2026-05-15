@@ -15,6 +15,10 @@ public class Piece
         Kind = kind;
     }
 
+    public Piece(Piece refPiece) : this(refPiece.Id, refPiece.Color, refPiece.Kind)
+    {
+    }
+
     /// <summary>
     /// Compare the piece with another to check if they share the same color and kind
     /// </summary>
