@@ -20,7 +20,7 @@ public class Piece
     }
 
     /// <summary>
-    /// Compare the piece with another to check if they share the same color and kind
+    /// Compare the piece with another and returns true if they share the same color and kind
     /// </summary>
     public bool IsSimilar(Piece otherPiece)
     {
