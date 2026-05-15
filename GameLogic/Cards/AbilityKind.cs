@@ -1,3 +1,5 @@
+namespace LeadersBoardGame.Cards;
+
 public enum AbilityKind
 {
     Active,
