@@ -96,6 +96,14 @@ public class Board
     }
 
     /// <summary>
+    /// Returns the adjacent tile in a given direction. If there is none, returns null instead
+    /// </summary>
+    public Tile? FindAdjacentTile(Tile originTile, Direction direction)
+    {
+        return FindAdjacentTile(originTile.Pos.X, originTile.Pos.Y, direction);
+    }
+
+    /// <summary>
     /// Return tiles with a non-null piece matching the given parameters
     /// </summary>
     public List<Tile> FindTilesWithMatchingPiece(PlayerColor? pieceColor, PieceKind? pieceKind)
