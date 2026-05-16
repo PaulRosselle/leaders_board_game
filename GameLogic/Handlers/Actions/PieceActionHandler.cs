@@ -120,11 +120,125 @@ public abstract class PieceActionHandler
         return [];
     }
 
-    public virtual void DoAction()
+    /// <summary>
+    /// Contains the logic to be applied on a DoAction call
+    /// </summary>
+    /// <exception cref="InvalidOperationException">
+    /// Thrown if the Handler has been created without an Action. This indicates a programming error.
+    /// </exception>
+    protected virtual void DoActionBehavior()
     {
+        if (Action is null)
+        {
+            throw new InvalidOperationException("Cannot do action : Action attribute missing");
+        }
+
+        // New, Movement and Ability default behavior can be synthetized with the following
+        // algorithm since the Action empty fields define what is to do for those action kinds
+        if (Action.Kind != PieceActionKind.Exclusion)
+        {
+            // First, we remove the pieces from their original position
+            if (Action.SourceDestPos is not null && Action.SourceOriginPos is not null)
+            {
+                Board.GetTile(Action.SourceOriginPos).Piece = null;
+            }
+            if (Action.TargetPiece is not null && Action.TargetDestPos is not null && Action.TargetOriginPos is not null)
+            {
+                Board.GetTile(Action.TargetOriginPos).Piece = null;
+            }
+            // Then we add them to their destination
+            if (Action.SourceDestPos is not null)
+            {
+                // We don't assign directly by reference when dealing with PieceAction since
+                // an action must keep trace of pieces state at a certain point
+                Board.GetTile(Action.SourceDestPos).Piece = new Piece(Action.SourcePiece);
+            }
+            
+            if (Action.TargetPiece is not null && Action.TargetDestPos is not null)
+            {
+                // We don't assign directly by reference when dealing with PieceAction since
+                // an action must keep trace of pieces state at a certain point
+                Board.GetTile(Action.TargetDestPos).Piece = new Piece(Action.TargetPiece);
+            }
+        }
     }
 
-    public virtual void UndoAction()
+    /// <summary>
+    /// Applies the Action effects on the board and adds it to the history
+    /// </summary>
+    /// <exception cref="InvalidOperationException">
+    /// Thrown if the Handler has been created without an Action. This indicates a programming error.
+    /// </exception>
+    public void DoAction()
     {
+        if (Action is null)
+        {
+            throw new InvalidOperationException("Cannot do action : Action attribute missing");
+        }
+        
+        DoActionBehavior();
+        // In any case, we add the action to the history
+        ActionHistory.AddAction(Action);
+    }
+
+    /// <summary>
+    /// Contains the logic to be applied on a UndoAction call
+    /// </summary>
+    /// <exception cref="InvalidOperationException">
+    /// Thrown if the Handler has been created without an Action. This indicates a programming error.
+    /// </exception>
+    protected virtual void UndoActionBehavior()
+    {
+        if (Action is null)
+        {
+            throw new InvalidOperationException("Cannot undo action : Action attribute missing");
+        }
+
+        // New, Movement and Ability default behavior can be synthetized with the following
+        // algorithm since the Action empty fields define what is to do for those action kinds
+        if (Action.Kind != PieceActionKind.Exclusion)
+        {
+            // First, we remove the pieces from their current position
+            if (Action.SourceDestPos is not null)
+            {
+                Board.GetTile(Action.SourceDestPos).Piece = null;
+            }
+            if (Action.TargetPiece is not null && Action.TargetDestPos is not null)
+            {
+                Board.GetTile(Action.TargetDestPos).Piece = null;
+            }
+            // Then we add them back to their original position
+            if (Action.SourceOriginPos is not null)
+            {
+                // We don't assign directly by reference when dealing with PieceAction since
+                // an action must keep trace of pieces state at a certain point
+                Board.GetTile(Action.SourceOriginPos).Piece = new Piece(Action.SourcePiece);
+            }
+            
+            if (Action.TargetPiece is not null && Action.TargetOriginPos is not null)
+            {
+                // We don't assign directly by reference when dealing with PieceAction since
+                // an action must keep trace of pieces state at a certain point
+                Board.GetTile(Action.TargetOriginPos).Piece = new Piece(Action.TargetPiece);
+            }
+        }
+    }
+
+    /// <summary>
+    /// Reverts the Action effects on the board and adds it to the history
+    /// </summary>
+    /// <exception cref="InvalidOperationException">
+    /// Thrown if the Handler has been created without an Action. This indicates a programming error.
+    /// </exception>
+    public void UndoAction()
+    {
+        if (Action is null)
+        {
+            throw new InvalidOperationException("Cannot undo action : Action attribute missing");
+        }
+
+        UndoActionBehavior();
+        // In any case, we remove the action from the history
+        ActionHistory.RemoveAction(Action);
     }
 }

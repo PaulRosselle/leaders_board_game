@@ -190,4 +190,9 @@ public class Board
         }
         throw new InvalidOperationException($"No piece found on the board with id {pieceId}");
     }
+
+    public Tile GetTile(Position pos)
+    {
+        return Tiles[pos.X][pos.Y];
+    }
 }
