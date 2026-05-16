@@ -11,4 +11,9 @@ public class Tile
     {
         Pos = pos;
     }
+
+    public Tile(Tile refTile) : this(new Position(refTile.Pos))
+    {
+        Piece = refTile.Piece is null ? null : new Piece(refTile.Piece);
+    }
 }
