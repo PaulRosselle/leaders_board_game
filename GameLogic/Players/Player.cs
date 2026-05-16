@@ -4,9 +4,9 @@ using LeadersBoardGame.GameLogic.Cards;
 
 public class Player
 {
-    public PlayerColor Color { get; init; }
-    public LeaderKind Leader { get; init; }
-    public string Name { get; init; }
+    public PlayerColor Color { get; }
+    public LeaderKind Leader { get; }
+    public string Name { get; }
 
     public Player(PlayerColor color, LeaderKind leader, string name)
     {

@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using LeadersBoardGame.GameLogic.Pieces;
 using LeadersBoardGame.GameLogic.Players;
@@ -6,7 +7,7 @@ namespace LeadersBoardGame.GameLogic.Boards;
 
 public class Board
 {
-    public Tile[][] Tiles { get; init; }
+    public Tile[][] Tiles { get; }
 
     public Board()
     {
@@ -116,7 +117,7 @@ public class Board
     }
 
     /// <summary>
-    /// Return tiles with a non-null piece matching the one given in parameter
+    /// Return tiles with a non-null piece matching the color and kind of the one given in parameter
     /// </summary>
     public List<Tile> FindTilesWithMatchingPiece(Piece piece)
     {
