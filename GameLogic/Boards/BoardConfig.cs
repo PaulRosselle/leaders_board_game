@@ -1,6 +1,6 @@
 using System.Security.Cryptography.X509Certificates;
 
-namespace LeadersBoardGame.Boards;
+namespace LeadersBoardGame.GameLogic.Boards;
 
 public static class BoardConfig
 {

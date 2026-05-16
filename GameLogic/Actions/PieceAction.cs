@@ -1,7 +1,7 @@
-namespace LeadersBoardGame.Actions;
+namespace LeadersBoardGame.GameLogic.Actions;
 
-using LeadersBoardGame.Pieces;
-using LeadersBoardGame.Boards;
+using LeadersBoardGame.GameLogic.Pieces;
+using LeadersBoardGame.GameLogic.Boards;
 
 public class PieceAction
 {

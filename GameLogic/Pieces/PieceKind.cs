@@ -1,7 +1,7 @@
-namespace LeadersBoardGame.Pieces;
+namespace LeadersBoardGame.GameLogic.Pieces;
 
 using System;
-using LeadersBoardGame.Cards;
+using LeadersBoardGame.GameLogic.Cards;
 
 public enum PieceKind
 {

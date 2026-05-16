@@ -1,4 +1,4 @@
-namespace LeadersBoardGame.GameStates;
+namespace LeadersBoardGame.GameLogic.GameStates;
 
 public enum GameTurnPhase
 {

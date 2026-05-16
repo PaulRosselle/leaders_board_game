@@ -1,6 +1,6 @@
-namespace LeadersBoardGame.Pieces;
+namespace LeadersBoardGame.GameLogic.Pieces;
 
-using LeadersBoardGame.Players;
+using LeadersBoardGame.GameLogic.Players;
 
 public class Piece
 {

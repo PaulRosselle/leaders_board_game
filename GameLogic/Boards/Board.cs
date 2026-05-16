@@ -1,9 +1,8 @@
-using System;
 using System.Collections.Generic;
-using LeadersBoardGame.Pieces;
-using LeadersBoardGame.Players;
+using LeadersBoardGame.GameLogic.Pieces;
+using LeadersBoardGame.GameLogic.Players;
 
-namespace LeadersBoardGame.Boards;
+namespace LeadersBoardGame.GameLogic.Boards;
 
 public class Board
 {

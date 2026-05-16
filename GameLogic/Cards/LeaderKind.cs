@@ -1,4 +1,4 @@
-namespace LeadersBoardGame.Cards;
+namespace LeadersBoardGame.GameLogic.Cards;
 
 public enum LeaderKind
 {
