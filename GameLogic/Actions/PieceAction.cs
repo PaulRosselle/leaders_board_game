@@ -5,8 +5,8 @@ using LeadersBoardGame.GameLogic.Boards;
 
 public class PieceAction
 {
-    public PieceActionKind Kind { get; init; }
-    public Piece SourcePiece { get; init; }
+    public PieceActionKind Kind { get; }
+    public Piece SourcePiece { get; }
     private Position? _sourceOriginPos;
     public Position? SourceOriginPos { get => _sourceOriginPos; set => _sourceOriginPos = value is null ? null : new Position(value); }
     private Position? _sourceDestPos;
