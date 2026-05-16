@@ -1,4 +1,4 @@
-namespace LeadersBoardGame.Players;
+namespace LeadersBoardGame.GameLogic.Players;
 
 public enum PlayerColor
 {

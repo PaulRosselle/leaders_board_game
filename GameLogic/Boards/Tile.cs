@@ -1,6 +1,6 @@
-using LeadersBoardGame.Pieces;
+using LeadersBoardGame.GameLogic.Pieces;
 
-namespace LeadersBoardGame.Boards;
+namespace LeadersBoardGame.GameLogic.Boards;
 
 public class Tile
 {

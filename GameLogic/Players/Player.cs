@@ -1,6 +1,6 @@
-namespace LeadersBoardGame.Players;
+namespace LeadersBoardGame.GameLogic.Players;
 
-using LeadersBoardGame.Cards;
+using LeadersBoardGame.GameLogic.Cards;
 
 public class Player
 {

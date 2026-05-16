@@ -1,4 +1,4 @@
-namespace LeadersBoardGame.Boards;
+namespace LeadersBoardGame.GameLogic.Boards;
 
 using System;
 using System.Collections.Generic;

@@ -1,4 +1,4 @@
-namespace LeadersBoardGame.Actions;
+namespace LeadersBoardGame.GameLogic.Actions;
 
 using System;
 using System.Collections.Generic;

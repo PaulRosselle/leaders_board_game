@@ -1,4 +1,4 @@
-namespace LeadersBoardGame.Actions;
+namespace LeadersBoardGame.GameLogic.Actions;
 
 public enum PieceActionKind
 {
