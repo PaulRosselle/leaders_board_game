@@ -51,8 +51,12 @@ public abstract class PieceActionHandler
         return true;
     }
 
+    /// <summary>
+    /// Returns true when the SourcePiece should be forced to play immediately.
+    /// </summary>
     public virtual bool MustAct()
     {
+        // Piece action is optional by default
         return false;
     }
 
