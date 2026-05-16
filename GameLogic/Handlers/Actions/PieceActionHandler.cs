@@ -25,8 +25,29 @@ public abstract class PieceActionHandler
         Action = action;
     }
 
+    /// <summary>
+    /// Returns true when the SourcePiece can act during the turn.
+    /// </summary>
     public virtual bool CanAct()
     {
+        // The default behavior is to allow a piece if it hasn't already acted this turn.
+        // We detect if an action has already been made by checking the current turn history.
+        // If there are no turn registered, we can return true since there won't be any action to check.
+        // This also avoid an unnecessary a call to "GetLastTurnActions" which would raise an exception
+        if (ActionHistory.ActionsPerTurn.Count == 0)
+        {
+            return true;
+        }
+
+        List<PieceAction> lastTurnActions = ActionHistory.GetLastTurnActions();
+        foreach (PieceAction action in lastTurnActions)
+        {
+            // We only compare the Id because some action could have changed other fields in the piece
+            if (action.SourcePiece.Id == SourcePiece.Id)
+            {
+                return false;
+            }
+        }
         return true;
     }
 
