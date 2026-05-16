@@ -1,4 +1,6 @@
+using System;
 using System.Collections.Generic;
+using LeadersBoardGame.GameLogic.Cards;
 using LeadersBoardGame.GameLogic.Pieces;
 using LeadersBoardGame.GameLogic.Players;
 
@@ -95,6 +97,14 @@ public class Board
     }
 
     /// <summary>
+    /// Returns the adjacent tile in a given direction. If there is none, returns null instead
+    /// </summary>
+    public Tile? FindAdjacentTile(Tile originTile, Direction direction)
+    {
+        return FindAdjacentTile(originTile.Pos.X, originTile.Pos.Y, direction);
+    }
+
+    /// <summary>
     /// Return tiles with a non-null piece matching the given parameters
     /// </summary>
     public List<Tile> FindTilesWithMatchingPiece(PlayerColor? pieceColor, PieceKind? pieceKind)
@@ -121,5 +131,42 @@ public class Board
     public List<Tile> FindTilesWithMatchingPiece(Piece piece)
     {
         return FindTilesWithMatchingPiece(piece.Color, piece.Kind);
+    }
+
+    /// <summary>
+    /// Returns the first tile with a leader of the expected color. If there is none, returns null instead
+    /// </summary>
+    public Tile? FindLeaderTile(PlayerColor leaderColor)
+    {
+        foreach (Tile[] columnTiles in Tiles)
+        {
+            foreach (Tile tile in columnTiles)
+            {
+                if (tile.Piece is not null && 
+                    tile.Piece.Color == leaderColor &&
+                    tile.Piece.Kind.GetCardKind().IsLeader())
+                {
+                    return tile;
+                }
+            }
+        }
+        return null;
+    }
+
+    /// <summary>
+    /// Returns the first tile with a leader of the expected color.
+    /// </summary>
+    /// <param name="leaderColor"></param>
+    /// <exception cref="InvalidOperationException">
+    /// Thrown if no leader could be found.
+    /// </exception>
+    public Tile GetLeaderTile(PlayerColor leaderColor)
+    {
+        Tile? leaderTile = FindLeaderTile(leaderColor);
+        if (leaderTile is null)
+        {
+            throw new InvalidOperationException($"No leader found for player {leaderColor}");
+        }
+        return leaderTile;
     }
 }
