@@ -123,4 +123,25 @@ public class Board
     {
         return FindTilesWithMatchingPiece(piece.Color, piece.Kind);
     }
+
+    /// <summary>
+    /// Returns the first tile containing a piece with a matching Id.
+    /// </summary>
+    /// <exception cref="InvalidOperationException">
+    /// Thrown if the piece is not on the board during the call. This indicates a programming error.
+    /// </exception>
+    public Tile GetPieceTileById(int pieceId)
+    {
+        foreach (Tile[] columnTiles in Tiles)
+        {
+            foreach (Tile tile in columnTiles)
+            {
+                if (tile.Piece is not null && tile.Piece.Id == pieceId)
+                {
+                    return tile;
+                }
+            }
+        }
+        throw new InvalidOperationException($"No piece found on the board with id {pieceId}");
+    }
 }
