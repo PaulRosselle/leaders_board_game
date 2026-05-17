@@ -105,9 +105,77 @@ public abstract class PieceActionHandler
         return HasActiveAbility() && !HasAdjacentPiece(SourcePiece.Color.GetOpposite(), PieceKind.Jailer);
     }
 
+    /// <summary>
+    /// Must be overridden by every child class to be able to create simulation instance matching the class type of "this"
+    /// </summary>
+    /// <param name="action">Action to perform by the simulation handler</param>
+    /// <param name="simulationBoard">Board on which the simulation will occur</param>
+    /// <param name="simulationHistory">History impacted by the simulation</param>
+    protected abstract PieceActionHandler CreateSimulationHandler(PieceAction action, Board simulationBoard, PieceActionHistory simulationHistory);
+
+    /// <summary>
+    /// Returns true if performing the action would lead to a forbidden state of the game.
+    /// The forbidden states are currently : capturing or encircling your own leader
+    /// </summary>
+    protected bool IsInvalidAction(PieceAction action)
+    {
+        // The more robust way to check is to simulate the action even though this is a slow process
+        Board simulationBoard = new Board(Board);
+        // We create a new empty history for the simulation since we don't need the complete one to check the action validity
+        PieceActionHistory simulationActionHistory = new PieceActionHistory();
+        simulationActionHistory.StartNewTurn();
+        PieceActionHandler simulationHandler = CreateSimulationHandler(action, simulationBoard, simulationActionHistory);
+        simulationHandler.DoAction();
+        // We check if the leader is captured or surrounded after the action on the simulation board
+        PlayerColor leaderColor = action.SourcePiece.Color;
+        return GameEndConditionChecker.IsLeaderCaptured(leaderColor, simulationBoard) || 
+               GameEndConditionChecker.IsLeaderSurrounded(leaderColor, simulationBoard);
+    }
+
+    /// <summary>
+    /// Returns the destination tiles reachable by the movement behavior of the SourcePiece
+    /// </summary>
+    protected virtual List<Tile> GetMovementFromBehavior()
+    {
+        // By default, a piece is able to move to any empty adjacent tile
+        Tile pieceTile = Board.GetPieceTileById(SourcePiece.Id);
+        List<Tile> movement = new List<Tile>();
+        foreach (Direction direction in Enum.GetValues<Direction>())
+        {
+            Tile? adjacentTile = Board.FindAdjacentTile(pieceTile, direction);
+            if (adjacentTile is not null && adjacentTile.Piece is null)
+            {
+                movement.Add(adjacentTile);
+            }
+        }
+        return movement;
+    }
+
+    /// <summary>
+    /// Returns a list containing only the valid destinations from the allMovement parameter
+    /// </summary>
+    protected List<Tile> FilterOutInvalidMovement(List<Tile> allMovement)
+    {
+        List<Tile> validMovement = new List<Tile>();
+        Position originPos = Board.GetPieceTileById(SourcePiece.Id).Pos;
+        foreach (Tile destTile in allMovement)
+        {
+            if (!IsInvalidAction(PieceAction.BuildMovementAction(SourcePiece, originPos, destTile.Pos)))
+            {
+                validMovement.Add(destTile);
+            }
+        }
+        return validMovement;
+    }
+
+    /// <summary>
+    /// Returns the destinations tiles reachable by the SourcePiece when using a Movement action.
+    /// This function should only be overridden to change the whole movement logic, to implement
+    /// a different piece movement behavior, consider overriding "GetMovementFromBehavior"
+    /// </summary>
     public virtual List<Tile> GetMovement()
     {
-        return [];
+        return FilterOutInvalidMovement(GetMovementFromBehavior());
     }
 
     public virtual List<Tile> GetTargets()
