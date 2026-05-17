@@ -132,23 +132,27 @@ public abstract class PieceActionHandler
                GameEndConditionChecker.IsLeaderSurrounded(leaderColor, simulationBoard);
     }
 
+    protected List<Tile> GetAdjacentEmptyTiles(Position originTilePos)
+    {
+        List<Tile> adjacentEmptyTiles = new List<Tile>();
+        foreach (Direction direction in Enum.GetValues<Direction>())
+        {
+            Tile? adjacentTile = Board.FindAdjacentTile(originTilePos, direction);
+            if (adjacentTile is not null && adjacentTile.Piece is null)
+            {
+                adjacentEmptyTiles.Add(adjacentTile);
+            }
+        }
+        return adjacentEmptyTiles;
+    }
+
     /// <summary>
     /// Returns the destination tiles reachable by the movement behavior of the SourcePiece
     /// </summary>
     protected virtual List<Tile> GetMovementFromBehavior()
     {
         // By default, a piece is able to move to any empty adjacent tile
-        Tile pieceTile = Board.GetPieceTileById(SourcePiece.Id);
-        List<Tile> movement = new List<Tile>();
-        foreach (Direction direction in Enum.GetValues<Direction>())
-        {
-            Tile? adjacentTile = Board.FindAdjacentTile(pieceTile, direction);
-            if (adjacentTile is not null && adjacentTile.Piece is null)
-            {
-                movement.Add(adjacentTile);
-            }
-        }
-        return movement;
+        return GetAdjacentEmptyTiles(Board.GetPieceTileById(SourcePiece.Id).Pos);
     }
 
     /// <summary>
@@ -183,9 +187,65 @@ public abstract class PieceActionHandler
         return [];
     }
 
-    public virtual List<Tile> GetTargetMovement(Tile targetTile)
+    /// <summary>
+    /// Returns the target destination tiles reachable by the target movement behavior of the SourcePiece
+    /// </summary>
+    protected virtual List<Tile> GetTargetMovementFromBehavior(Piece targetPiece, Position targetOriginPos)
     {
-        return [];
+        // By default, the target piece can be moved to any empty adjacent tile
+        return GetAdjacentEmptyTiles(targetOriginPos);
+    }
+
+    /// <summary>
+    /// Returns the Ability action matching the target movement described by the SourcePiece and parameters
+    /// </summary>
+    protected virtual PieceAction GetTargetMovementAction(Piece targetPiece, Position targetOriginPos, Position targetDestPos, Position sourceOriginPos)
+    {
+        // By default, a target movement action moves only the target
+        return PieceAction.BuildAbilityAction(SourcePiece, sourceOriginPos, null, targetPiece, targetOriginPos, targetDestPos);
+    }
+
+    /// <summary>
+    /// Returns a list containing only the valid target destinations from the allTargetMovement parameter
+    /// </summary>
+    protected List<Tile> FilterOutInvalidTargetMovement(Piece targetPiece, Position targetOriginPos, List<Tile> allTargetMovement)
+    {
+        List<Tile> validMovement = new List<Tile>();
+        Position sourceOriginPos = Board.GetPieceTileById(SourcePiece.Id).Pos;
+        foreach (Tile targetDestTile in allTargetMovement)
+        {
+            if (!IsInvalidAction(GetTargetMovementAction(targetPiece, targetOriginPos, targetDestTile.Pos, sourceOriginPos)))
+            {
+                validMovement.Add(targetDestTile);
+            }
+        }
+        return validMovement;
+    }
+
+    /// <summary>
+    /// Returns the destinations tiles reachable by the targetTile when using an Ability action.
+    /// This function should only be overridden to change the whole target movement logic, to implement
+    /// a different target movement behavior, consider overriding "GetTargetMovementFromBehavior"
+    /// </summary>
+    /// <exception cref="InvalidOperationException">
+    /// Thrown when :
+    /// 1. SourceToken has no active ability
+    /// 2. No target piece could be found on the targetTile.
+    /// Both of this exception indicate a programming error.
+    /// </exception>
+    public virtual List<Tile> GetTargetMovement(Tile targetTile)
+    {   
+        if (!HasActiveAbility()){
+            throw new InvalidOperationException("Cannot initialie a target movement without an active ability");
+        }
+        // A piece is required to initiate a target movement
+        Piece? targetPiece = targetTile.Piece;
+        if (targetPiece is null)
+        {
+            throw new InvalidOperationException("No target piece found on the targeted tile");
+        }
+        Position targetOriginPos = targetTile.Pos;
+        return FilterOutInvalidTargetMovement(targetPiece, targetOriginPos, GetTargetMovementFromBehavior(targetPiece, targetOriginPos));
     }
 
     /// <summary>
