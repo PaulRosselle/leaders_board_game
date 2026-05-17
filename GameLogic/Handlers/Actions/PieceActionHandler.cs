@@ -182,9 +182,74 @@ public abstract class PieceActionHandler
         return FilterOutInvalidMovement(GetMovementFromBehavior());
     }
 
-    public virtual List<Tile> GetTargets()
+    /// <summary>
+    /// Returns the tiles targetable based on the targeting behavior of the SourcePiece
+    /// </summary>
+    protected virtual List<Tile> GetTargetsFromBehavior()
     {
-        return [];
+        // Default behavior is to target itself
+        return new List<Tile> { Board.GetPieceTileById(SourcePiece.Id) };
+    }
+
+    /// <summary>
+    /// Returns every tile containing a piece protected by an opposing Protector ability
+    /// </summary>
+    protected HashSet<Tile> GetProtectedOpponentTiles()
+    {
+        // Passive ability : the protector prevents itself as well as its adjacent allies to be moved by opposing pieces abilities
+        // We use a HashSet since it prevent duplicate addition natively
+        HashSet<Tile> protectedOpponents = new HashSet<Tile>();
+        PlayerColor opponentColor = SourcePiece.Color.GetOpposite();
+        foreach (Tile opposingProtectorTile in Board.FindTilesWithMatchingPiece(opponentColor, PieceKind.Protector))
+        {
+            // We add every protector to the list
+            protectedOpponents.Add(opposingProtectorTile);
+            // Then every ally adjacent to each protector
+            foreach (Direction direction in Enum.GetValues<Direction>())
+            {
+                Tile? adjacentTile = Board.FindAdjacentTile(opposingProtectorTile, direction);
+                if (adjacentTile is not null && adjacentTile.Piece is not null && adjacentTile.Piece.Color == opponentColor)
+                {
+                    protectedOpponents.Add(adjacentTile);
+                }
+            }
+        }
+        return protectedOpponents;
+    }
+
+    /// <summary>
+    /// Returns a list containing only the valid targets from the allTargets parameter
+    /// </summary>
+    protected virtual List<Tile> FilterOutInvalidTargets(List<Tile> allTargets)
+    {
+        List<Tile> validTargets = new List<Tile>();
+        HashSet<Tile> protectedOpponents = GetProtectedOpponentTiles();
+        foreach (Tile targetTile in allTargets)
+        {
+            // Since the default target ability behavior is to move the target, we filter out every
+            // tile protected from targeted movement or without a valid destination
+            if (!protectedOpponents.Contains(targetTile) && GetTargetMovement(targetTile).Count > 0)
+            {
+                validTargets.Add(targetTile);
+            }
+        }
+        return validTargets;
+    }
+
+    /// <summary>
+    /// Returns the pieces tiles targetable by the SourcePiece Active ability
+    /// This function should only be overridden to change the whole targeting logic, to implement
+    /// a different targeting behavior, consider overriding "GetTargetsFromBehavior"
+    /// </summary>
+    /// <exception cref="InvalidOperationException">
+    /// Thrown when SourcePiece has no active ability. This indicates a programming error.
+    /// </exception>
+    public virtual List<Tile> GetTargets()
+    {        
+        if (!HasActiveAbility()){
+            throw new InvalidOperationException("Cannot target without an active ability");
+        }
+        return FilterOutInvalidTargets(GetTargetsFromBehavior());
     }
 
     /// <summary>
