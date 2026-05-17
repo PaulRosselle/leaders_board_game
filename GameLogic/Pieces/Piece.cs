@@ -4,8 +4,8 @@ using LeadersBoardGame.GameLogic.Players;
 
 public class Piece
 {
-    public int Id { get; init; }
-    public PlayerColor Color { get; init; }
+    public int Id { get; }
+    public PlayerColor Color { get; set; }
     public PieceKind Kind { get; set; }
 
     public Piece(int id, PlayerColor color, PieceKind kind)

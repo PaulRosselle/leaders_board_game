@@ -5,7 +5,7 @@ using System.Collections.Generic;
 
 public class PieceActionHistory
 {
-    public List<List<PieceAction>> ActionsPerTurn { get; init; }
+    public List<List<PieceAction>> ActionsPerTurn { get; }
 
     public PieceActionHistory()
     {
@@ -24,6 +24,10 @@ public class PieceActionHistory
         }
     }
     
+
+    /// <exception cref="InvalidOperationException">
+    /// Thrown if ActionsPerTurn is empty during the call. This indicates a programming error.
+    /// </exception>
     public List<PieceAction> GetLastTurnActions()
     {
         if (ActionsPerTurn.Count == 0)
@@ -33,6 +37,9 @@ public class PieceActionHistory
         return ActionsPerTurn[^1];
     }
 
+    /// <exception cref="InvalidOperationException">
+    /// Thrown if there are no action in the last turn actions list. This indicates a programming error.
+    /// </exception>
     public PieceAction GetLastAction()
     {
         List<PieceAction> lastTurnActions = GetLastTurnActions();
@@ -48,6 +55,9 @@ public class PieceActionHistory
         GetLastTurnActions().Add(action);
     }
 
+    /// <exception cref="InvalidOperationException">
+    /// Thrown if the action removal failed. This indicates a programming error.
+    /// </exception>
     public void RemoveAction(PieceAction action)
     {
         if (GetLastTurnActions().Remove(action))

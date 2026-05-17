@@ -5,8 +5,8 @@ using LeadersBoardGame.GameLogic.Boards;
 
 public class PieceAction
 {
-    public PieceActionKind Kind { get; init; }
-    public Piece SourcePiece { get; init; }
+    public PieceActionKind Kind { get; }
+    public Piece SourcePiece { get; }
     private Position? _sourceOriginPos;
     public Position? SourceOriginPos { get => _sourceOriginPos; set => _sourceOriginPos = value is null ? null : new Position(value); }
     private Position? _sourceDestPos;
@@ -18,20 +18,36 @@ public class PieceAction
     private Position? _targetDestPos;
     public Position? TargetDestPos { get => _targetDestPos; set => _targetDestPos = value is null ? null : new Position(value); }
 
-    public PieceAction(PieceActionKind kind, Piece sourcePiece)
+    /// <summary>
+    /// Creates a new PieceAction instance. Every field is affected with a copy of the references given as parameters
+    /// </summary>
+    /// <param name="kind">Indicates the structure and purpose of the action</param>
+    /// <param name="sourcePiece">Piece initiating the action</param>
+    /// <param name="sourceOriginPos">Original position of the source piece</param>
+    /// <param name="sourceDestPos">Destination of the source piece</param>
+    /// <param name="targetPiece">Piece targeted by the action</param>
+    /// <param name="targetOriginPos">Original position of the targeted piece</param>
+    /// <param name="targetDestPos">Destination of the targeted piece</param>
+    private PieceAction(PieceActionKind kind, Piece sourcePiece, Position? sourceOriginPos, Position? sourceDestPos, 
+                        Piece? targetPiece, Position? targetOriginPos, Position? targetDestPos)
     {
         Kind = kind;
-        SourcePiece = sourcePiece;
+        SourcePiece = new Piece(sourcePiece);
+        _sourceOriginPos = sourceOriginPos is null ? null : new Position(sourceOriginPos);
+        _sourceDestPos = sourceDestPos is null ? null : new Position(sourceDestPos);
+        _targetPiece = targetPiece is null ? null : new Piece(targetPiece);
+        TargetOriginPos = targetOriginPos is null ? null : new Position(targetOriginPos);
+        _targetDestPos = targetDestPos is null ? null : new Position(targetDestPos);
     }
 
-    public PieceAction(PieceAction refPieceAction) : this(refPieceAction.Kind, new Piece(refPieceAction.SourcePiece))
+    /// <summary>
+    /// Copy constructor
+    /// </summary>
+    /// <param name="refPieceAction">Action to be copied</param>
+    public PieceAction(PieceAction refPieceAction) : this(refPieceAction.Kind, 
+                                                          refPieceAction.SourcePiece, refPieceAction.SourceOriginPos, refPieceAction.SourceDestPos, 
+                                                          refPieceAction.TargetPiece, refPieceAction.TargetOriginPos, refPieceAction.TargetDestPos)
     {
-        _sourceOriginPos = refPieceAction.SourceOriginPos is null ? null : new Position(refPieceAction.SourceOriginPos);
-        _sourceDestPos = refPieceAction.SourceDestPos is null ? null : new Position(refPieceAction.SourceDestPos);
-
-        _targetPiece = refPieceAction.TargetPiece is null ? null : new Piece(refPieceAction.TargetPiece);
-        TargetOriginPos = refPieceAction.TargetOriginPos is null ? null : new Position(refPieceAction.TargetOriginPos);
-        _targetDestPos = refPieceAction.TargetDestPos is null ? null : new Position(refPieceAction.TargetDestPos);
     }
 
     /// <summary>
@@ -46,5 +62,51 @@ public class PieceAction
                 TargetPiece == otherPieceAction.TargetPiece &&
                 TargetOriginPos == otherPieceAction.TargetOriginPos &&
                 TargetDestPos == otherPieceAction.TargetDestPos;
+    }
+
+    /// <summary>
+    /// Builds a New action instance. Every field is affected with a copy of the references given as parameters
+    /// </summary>
+    /// <param name="sourcePiece">Piece added to the board</param>
+    /// <param name="sourceDestPos">Destination of the source piece on the board</param>
+    public static PieceAction BuildNewAction(Piece sourcePiece, Position sourceDestPos)
+    {
+        return new PieceAction(PieceActionKind.New, sourcePiece, null, sourceDestPos, null, null, null);
+    }
+
+    /// <summary>
+    /// Builds an Exclusion action instance. Every field is affected with a copy of the references given as parameters
+    /// </summary>
+    /// <param name="sourcePiece">Piece excluded from the game</param>
+    public static PieceAction BuidExclusionAction(Piece sourcePiece)
+    {
+        return new PieceAction(PieceActionKind.Exclusion, sourcePiece, null, null, null, null, null);
+    }
+
+    /// <summary>
+    /// Builds a movement action instance. Every field is affected with a copy of the references given as parameters
+    /// </summary>
+    /// <param name="sourcePiece">Piece moved by the action</param>
+    /// <param name="sourceOriginPos">Original position of the source piece</param>
+    /// <param name="sourceDestPos">Destination of the source piece</param>
+    public static PieceAction BuildMovementAction(Piece sourcePiece, Position sourceOriginPos, Position sourceDestPos)
+    {
+        return new PieceAction(PieceActionKind.Movement, sourcePiece, sourceOriginPos, sourceDestPos, null, null, null);
+    }
+
+    /// <summary>
+    /// Builds an ability action instance. Every field is affected with a copy of the references given as parameters
+    /// </summary>
+    /// <param name="sourcePiece">Piece initiating the action</param>
+    /// <param name="sourceOriginPos">Original position of the source piece</param>
+    /// <param name="sourceDestPos">Destination of the source piece</param>
+    /// <param name="targetPiece">Piece targeted by the action</param>
+    /// <param name="targetOriginPos">Original position of the targeted piece</param>
+    /// <param name="targetDestPos">Destination of the targeted piece</param>
+    /// <returns></returns>
+    public static PieceAction BuildAbilityAction(Piece sourcePiece, Position? sourceOriginPos, Position? sourceDestPos, 
+                                                 Piece targetPiece, Position? targetOriginPos, Position? targetDestPos)
+    {
+        return new PieceAction(PieceActionKind.Ability, sourcePiece, sourceOriginPos, sourceDestPos, targetPiece, targetOriginPos, targetDestPos);
     }
 }

@@ -4,7 +4,7 @@ namespace LeadersBoardGame.GameLogic.Boards;
 
 public class Tile
 {
-    public Position Pos { get; init; }
+    public Position Pos { get; }
     public Piece? Piece { get; set; }
 
     public Tile(Position pos)

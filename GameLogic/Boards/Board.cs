@@ -8,7 +8,7 @@ namespace LeadersBoardGame.GameLogic.Boards;
 
 public class Board
 {
-    public Tile[][] Tiles { get; init; }
+    public Tile[][] Tiles { get; }
 
     public Board()
     {
@@ -126,7 +126,7 @@ public class Board
     }
 
     /// <summary>
-    /// Return tiles with a non-null piece matching the one given in parameter
+    /// Return tiles with a non-null piece matching the color and kind of the one given in parameter
     /// </summary>
     public List<Tile> FindTilesWithMatchingPiece(Piece piece)
     {
@@ -168,5 +168,31 @@ public class Board
             throw new InvalidOperationException($"No leader found for player {leaderColor}");
         }
         return leaderTile;
+    }
+
+    /// <summary>
+    /// Returns the first tile containing a piece with a matching Id.
+    /// </summary>
+    /// <exception cref="InvalidOperationException">
+    /// Thrown if the piece is not on the board during the call. This indicates a programming error.
+    /// </exception>
+    public Tile GetPieceTileById(int pieceId)
+    {
+        foreach (Tile[] columnTiles in Tiles)
+        {
+            foreach (Tile tile in columnTiles)
+            {
+                if (tile.Piece is not null && tile.Piece.Id == pieceId)
+                {
+                    return tile;
+                }
+            }
+        }
+        throw new InvalidOperationException($"No piece found on the board with id {pieceId}");
+    }
+
+    public Tile GetTile(Position pos)
+    {
+        return Tiles[pos.X][pos.Y];
     }
 }
