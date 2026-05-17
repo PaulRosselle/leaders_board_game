@@ -156,6 +156,7 @@ public static class GameEndConditionChecker
 
         return tile.Piece.Kind switch
         {
+            // The archer can only capture from a distance of two
             PieceKind.Archer => distance == 2 ? 1 : 0,
             // The assassin immediately captures the leader if he is adjacent to it
             PieceKind.Assassin => distance == 1 ? s_leader_required_capture_value : 0,

@@ -132,18 +132,46 @@ public abstract class PieceActionHandler
                GameEndConditionChecker.IsLeaderSurrounded(leaderColor, simulationBoard);
     }
 
-    protected List<Tile> GetAdjacentEmptyTiles(Position originTilePos)
+    /// <summary>
+    /// Returns adjacent tiles around the originTilePos until maxDistance is reached
+    /// </summary>
+    protected List<Tile> GetAdjacentEmptyTiles(Position originTilePos, int maxDistance)
     {
-        List<Tile> adjacentEmptyTiles = new List<Tile>();
+        HashSet<Tile> adjacentEmptyTiles = new HashSet<Tile>();
+        // Since the distance to an immediately adjacent tile is 1, we initialize "currentDistance" with this value
+        GatherAdjacentEmptyTiles(originTilePos, adjacentEmptyTiles, maxDistance, 1)
+        return adjacentEmptyTiles.ToList();
+    }
+
+    /// <summary>
+    /// Fills recursively "adjacentEmptyTiles" with the adjacent tiles around the originTilePos until maxDistance is reached
+    /// </summary>
+    private void GatherAdjacentEmptyTiles(Position currentTilePos, HashSet<Tile> adjacentEmptyTiles, int maxDistance, int currentDistance)
+    {
         foreach (Direction direction in Enum.GetValues<Direction>())
         {
-            Tile? adjacentTile = Board.FindAdjacentTile(originTilePos, direction);
-            if (adjacentTile is not null && adjacentTile.Piece is null)
-            {
-                adjacentEmptyTiles.Add(adjacentTile);
+            Tile? adjacentTile = Board.FindAdjacentTile(currentTilePos, direction);
+            // If we encounter an adjacent empty tile, we try to add it to the the list.
+            // We only add it if it is a new one and we only recurse if that's the case
+            if (adjacentTile is not null && adjacentTile.Piece is null && adjacentEmptyTiles.Add(adjacentTile) && currentDistance < maxDistance)
+            {   
+                GatherAdjacentEmptyTiles(adjacentTile.Pos, adjacentEmptyTiles, maxDistance, currentDistance + 1);
             }
         }
-        return adjacentEmptyTiles;
+    }
+
+    /// <summary>
+    /// Returns the movement max distance allowed by the SourcePiece movement behavior
+    /// </summary>
+    protected virtual int GetMovementDistance()
+    {
+        // Passive ability : the vizier allows its leader to move to up to two tiles per action
+        if (SourcePiece.Kind.GetCardKind().IsLeader() && Board.FindTilesWithMatchingPiece(SourcePiece.Color, PieceKind.Vizier).Count > 0)
+        {
+            return 2;
+        }
+        // By default, a piece can move to an immediately adjacent tile
+        return 1;
     }
 
     /// <summary>
@@ -152,7 +180,7 @@ public abstract class PieceActionHandler
     protected virtual List<Tile> GetMovementFromBehavior()
     {
         // By default, a piece is able to move to any empty adjacent tile
-        return GetAdjacentEmptyTiles(Board.GetPieceTileById(SourcePiece.Id).Pos);
+        return GetAdjacentEmptyTiles(Board.GetPieceTileById(SourcePiece.Id).Pos, GetMovementDistance());
     }
 
     /// <summary>
@@ -258,7 +286,7 @@ public abstract class PieceActionHandler
     protected virtual List<Tile> GetTargetMovementFromBehavior(Piece targetPiece, Position targetOriginPos)
     {
         // By default, the target piece can be moved to any empty adjacent tile
-        return GetAdjacentEmptyTiles(targetOriginPos);
+        return GetAdjacentEmptyTiles(targetOriginPos, 1);
     }
 
     /// <summary>
