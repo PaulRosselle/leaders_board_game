@@ -139,7 +139,7 @@ public abstract class PieceActionHandler
     {
         HashSet<Tile> adjacentEmptyTiles = new HashSet<Tile>();
         // Since the distance to an immediately adjacent tile is 1, we initialize "currentDistance" with this value
-        GatherAdjacentEmptyTiles(originTilePos, adjacentEmptyTiles, maxDistance, 1)
+        GatherAdjacentEmptyTiles(originTilePos, adjacentEmptyTiles, maxDistance, 1);
         return adjacentEmptyTiles.ToList();
     }
 
