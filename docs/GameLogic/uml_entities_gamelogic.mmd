@@ -1,0 +1,91 @@
+classDiagram
+    direction TB
+
+    %% Enums
+    class TeamColor {
+        <<enumeration>>
+        Black
+        White
+    }
+
+    class CharacterType {
+        <<enumeration>>
+    }
+
+    class PlayPermission {
+        <<enumeration>>
+        Forbidden
+        Allowed
+        Mandatory
+    }
+
+    class TurnPhaseType {
+        <<enumeration>>
+        Start
+        Action
+        Recruitment
+        Banishment
+        End
+    }
+
+    %% Entités
+    class Position {
+        +X : Integer
+        +Y : Integer
+    }
+
+    class Character {
+        +Type : CharacterType
+        +Color : TeamColor
+    }
+
+    class CharacterState {
+        +Playability : PlayPermission
+        +AbilityBlockedBy : List~CharacterType~
+        +TransformedInto : CharacterType
+    }
+
+    class CharacterContext {
+        +Character : Character
+        +State : CharacterState
+        +Position : Position
+    }
+
+    class Cell {
+        +Pos : Position
+        +Tile : Tile
+        +Character : Character
+    }
+
+    class Board {
+        +Cells : List~Cell~
+    }
+
+    class Player {
+        +Name : String
+        +Color : TeamColor
+        +WarningCount : Integer
+    }
+
+    class TurnPhase {
+        +PhaseType : TurnPhaseType
+        +PhasePlayer : Player
+    }
+
+    %% Relations structurelles
+    Board "1" --> "0..*" Cell
+    Cell --> Position
+    Cell "0..1" --> "0..1" Character
+    CharacterContext --> Character
+    CharacterContext --> CharacterState
+    CharacterContext --> Position
+    TurnPhase --> Player
+
+    %% Relations vers enums
+    Character --> CharacterType
+    Character --> TeamColor
+    CharacterState --> PlayPermission
+    CharacterState --> CharacterType : AbilityBlockedBy
+    CharacterState ..> CharacterType : TransformedInto
+    Player --> TeamColor
+    TurnPhase --> TurnPhaseType

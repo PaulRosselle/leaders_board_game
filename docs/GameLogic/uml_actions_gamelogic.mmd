@@ -1,0 +1,52 @@
+classDiagram
+    direction TB
+
+    %% Enums
+    class GameActionType {
+        <<enumeration>>
+        PhaseChange
+        CharacterAction
+        Recruitment
+        Banishment
+    }
+
+    %% Interface
+    class IGameAction {
+        <<interface>>
+        +ActionType : GameActionType
+    }
+
+    %% Actions concrètes
+    class PhaseChangeAction {
+        +PreviousPhase : TurnPhase
+        +NewPhase : TurnPhase
+    }
+    class CharacterActionDetail {
+        +Character : Character
+        +OriginPos : Position
+        +DestPos : Position
+        +PreviousState : CharacterState
+        +NewState : CharacterState
+    }
+    class CharacterAction {
+        +Source : CharacterActionDetail
+        +Targets : List~CharacterActionDetail~
+    }
+    class RecruitmentAction {
+        +Character : Character
+        +DestPos : Position
+    }
+    class BanishmentAction {
+        +Card : CharacterCard
+        +Author : Player
+    }
+
+    %% Héritage
+    IGameAction <|.. PhaseChangeAction
+    IGameAction <|.. CharacterAction
+    IGameAction <|.. RecruitmentAction
+    IGameAction <|.. BanishmentAction
+
+    %% Relations
+    IGameAction --> GameActionType
+    CharacterAction --> CharacterActionDetail

@@ -1,0 +1,110 @@
+classDiagram
+    direction TB
+
+    %% Enums
+    class CharacterType {
+        <<enumeration>>
+    }
+
+    %% Game
+    class Game {
+        +Players : List~Player~
+        +FirstPlayer : Player
+        +CurrentPlayer : Player
+        +CurrentPhase : TurnPhase
+        +Board : Board
+        +RecruitableCards : List~CharacterCard~
+        CharacterStates : Dictionary~Character, CharacterState~
+        +History : List~IGameAction~
+    }
+
+    %% Handlers
+    class IActionHandler {
+        <<interface>>
+        +DoAction()
+        +UndoAction()
+    }
+    class PhaseChangeActionHandler
+    class RecruitmentActionHandler
+    class BanishmentActionHandler
+    class CharacterActionHandler {
+        <<abstract>>
+    }
+
+    %% Resolvers
+    class CharacterActionResolver {
+        <<abstract>>
+        +GetMovementActions()
+        +GetActiveAbilityActions()
+    }
+
+    %% Query
+    class BoardQuery {
+        <<static>>
+        +IsLeaderCaptured() Boolean
+        +IsLeaderSurrounded() Boolean
+        +IsBarrageDetected() Boolean
+    }
+
+    %% Factories
+    class BoardFactory {
+        <<static>>
+        +Create()
+    }
+    class GameFactory {
+        <<static>>
+        +Create() Game
+    }
+    class CharacterFactory {
+        <<static>>
+        +Create()
+    }
+    class CharacterActionResolverFactory {
+        <<static>>
+        +Create(type : CharacterType) CharacterActionResolver
+    }
+    class CharacterActionHandlerFactory {
+        <<static>>
+        +Create(type : CharacterType) CharacterActionHandler
+    }
+
+    %% GameHandler
+    class GameHandler {
+        +CurrentGame : Game
+        +GetPlayableCharacters() List~CharacterContext~
+        +GetMovementActions() List~CharacterAction~
+        +GetActiveAbilityActions() List~CharacterAction~
+        +GetRecruitmentActions() List~RecruitmentAction~
+        +GetBanishmentActions() List~BanishmentAction~
+        +DoAction()
+        +UndoLastAction()
+        +IsGameOver() Boolean
+    }
+
+    %% Héritage handlers
+    IActionHandler <|.. PhaseChangeActionHandler
+    IActionHandler <|.. RecruitmentActionHandler
+    IActionHandler <|.. BanishmentActionHandler
+    IActionHandler <|.. CharacterActionHandler
+
+    %% GameFactory produit Game
+    GameFactory ..> BoardFactory
+    GameFactory ..> CharacterFactory
+    GameFactory ..> Game
+
+    %% GameHandler
+    GameHandler --> Game
+    GameHandler --> CharacterActionResolverFactory
+    GameHandler --> CharacterActionHandlerFactory
+    GameHandler ..> CharacterActionResolver
+    GameHandler ..> IActionHandler
+
+    %% Resolver
+    CharacterActionResolver ..> BoardQuery
+    CharacterActionResolverFactory ..> CharacterActionResolver
+    CharacterActionResolverFactory --> CharacterType
+    CharacterActionHandlerFactory ..> CharacterActionHandler
+    CharacterActionHandlerFactory --> CharacterType
+
+    %% BoardQuery
+    BoardQuery ..> Game
