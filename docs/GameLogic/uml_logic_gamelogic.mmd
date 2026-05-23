@@ -112,9 +112,11 @@ classDiagram
     GameHandler --> CharacterActionHandlerFactory
     GameHandler ..> CharacterActionResolver
     GameHandler ..> IActionHandler
+    GameHandler --> GameQuery
 
     %% Resolver
     CharacterActionResolver ..> BoardQuery
+    CharacterActionResolver ..> GameQuery
     CharacterActionResolver ..> CharacterActionFactory
     CharacterActionResolverFactory ..> CharacterActionResolver
     CharacterActionResolverFactory --> CharacterType
