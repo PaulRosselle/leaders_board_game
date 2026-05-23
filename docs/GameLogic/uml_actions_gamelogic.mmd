@@ -29,6 +29,7 @@ classDiagram
         +NewState : CharacterState
     }
     class CharacterAction {
+        +IsActiveAbility : Boolean
         +Source : CharacterActionDetail
         +Targets : List~CharacterActionDetail~
     }

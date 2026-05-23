@@ -1,0 +1,18 @@
+using LeadersBoardGame.GameLogic.Entities;
+using LeadersBoardGame.GameLogic.Enums;
+
+namespace LeadersBoardGame.GameLogic.Actions;
+
+public class RecruitmentAction : IGameAction
+{
+    public GameActionType ActionType => GameActionType.Recruitment;
+
+    public Character Character;
+    public Position DestPos;
+
+    public RecruitmentAction(Character character, Position destPos)
+    {
+        Character = character;
+        DestPos = destPos;
+    }
+}
