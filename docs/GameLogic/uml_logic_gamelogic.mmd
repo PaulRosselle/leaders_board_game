@@ -41,6 +41,15 @@ classDiagram
     %% Query
     class BoardQuery {
         <<static>>
+        +GetCell() Cell
+        +FindAdjacentCell() Cell
+        +FindLeaderCell() Cell
+        +GetCharacterCellById() Cell
+        +FindCellsWithMatchingCharacter() Cell
+    }
+
+    class GameQuery {
+        <<static>>
         +IsLeaderCaptured() Boolean
         +IsLeaderSurrounded() Boolean
         +IsBarrageDetected() Boolean
@@ -112,5 +121,5 @@ classDiagram
     CharacterActionHandlerFactory ..> CharacterActionHandler
     CharacterActionHandlerFactory --> CharacterType
 
-    %% BoardQuery
-    BoardQuery ..> Game
+    %% GameQuery
+    GameQuery ..> Game
