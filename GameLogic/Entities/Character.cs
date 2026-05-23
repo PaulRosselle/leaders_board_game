@@ -5,8 +5,8 @@ namespace LeadersBoardGame.GameLogic.Entities;
 public class Character
 {
     public int Id { get; }
-    public CharacterType Type { get; set; }
-    public TeamColor Color { get; set; }
+    public CharacterType Type { get; }
+    public TeamColor Color { get; }
 
     public Character(int id, CharacterType type, TeamColor color)
     {
