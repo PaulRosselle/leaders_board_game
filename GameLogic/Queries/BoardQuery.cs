@@ -73,7 +73,7 @@ public static class BoardQuery
             {
                 if (cell.Character is not null && 
                     (characterColor is null || cell.Character.Color == characterColor) && 
-                    (characterType is null || cell.Character.Type == characterType))
+                    (characterType is null || cell.Character.CharacterType == characterType))
                 {
                     cellsWithMatchingPiece.Add(cell);
                 }
@@ -93,7 +93,7 @@ public static class BoardQuery
             {
                 if (cell.Character is not null && 
                     cell.Character.Color == leaderColor &&
-                    cell.Character.Type.GetCharacterCard().IsLeader())
+                    cell.Character.CharacterType.GetCharacterCard().IsLeader())
                 {
                     return cell;
                 }
