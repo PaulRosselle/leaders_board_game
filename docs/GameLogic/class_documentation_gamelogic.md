@@ -125,6 +125,9 @@ Constructs and initializes a `Board`. Responsible for the build of cells adjacen
 ### `GameFactory`
 Constructs and initializes a `Game` with every subsequent fields ready to use.
 
+### `CharacterActionFactory`
+Constructs and initializes a `CharacterAction`. Makes the distinction between the creation of a "Movement" or "ActiveAbility" action.
+
 ### `CharacterActionResolverFactory`
 Instantiates the appropriate `CharacterActionResolver` subclass for a given `CharacterType`. Enables per-character resolution logic without conditional branching in the caller.
 
@@ -136,7 +139,10 @@ Instantiates the appropriate `CharacterActionHandler` subclass for a given `Char
 ## Queries
 
 ### `BoardQuery`
-Provides stateless read-only queries over a `Board`. Centralizes board inspection logic shared across handlers, resolvers, and end condition checking. Kept static as it holds no state.
+Provides stateless read-only queries over a `Board`. Centralizes board inspection logic shared across handlers, resolvers. Kept static as it holds no state.
+
+### `GameQuery`
+Provides stateless read-only queries over a `Game`. Centralizes end condition checking. Kept static as it holds no state.
 
 ---
 
