@@ -5,7 +5,7 @@ namespace LeadersBoardGame.GameLogic.Handlers;
 
 public class BanishmentActionHandler : IActionHandler
 {
-    private Game _game;
+    private readonly Game _game;
     public Game Game => _game;
     public BanishmentAction Action { get; }
 
