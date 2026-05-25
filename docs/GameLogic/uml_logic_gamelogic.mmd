@@ -69,11 +69,6 @@ classDiagram
         <<static>>
         +Create()
     }
-    class CharacterActionFactory {
-        <<static>>
-        +CreateMovement()
-        +CreateAbilityActivation()
-    }
     class CharacterActionResolverFactory {
         <<static>>
         +Create(type : CharacterType) CharacterActionResolver
@@ -118,7 +113,6 @@ classDiagram
     %% Resolver
     CharacterActionResolver ..> BoardQuery
     CharacterActionResolver ..> GameQuery
-    CharacterActionResolver ..> CharacterActionFactory
     CharacterActionResolverFactory ..> CharacterActionResolver
     CharacterActionResolverFactory --> CharacterType
     CharacterActionHandlerFactory ..> CharacterActionHandler
