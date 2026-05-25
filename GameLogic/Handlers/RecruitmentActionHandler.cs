@@ -7,7 +7,7 @@ namespace LeadersBoardGame.GameLogic.Handlers;
 
 public class RecruitmentActionHandler : IActionHandler
 {
-    private Game _game;
+    private readonly Game _game;
     public Game Game => _game;
     public RecruitmentAction Action { get; }
 
