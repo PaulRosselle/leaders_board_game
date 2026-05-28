@@ -1,10 +1,8 @@
+namespace LeadersBoardGame.GameLogic.Handlers;
+
 using LeadersBoardGame.GameLogic.Entities;
 using LeadersBoardGame.GameLogic.Actions;
 using System;
-using LeadersBoardGame.GameLogic.Queries;
-using System.Collections.Generic;
-
-namespace LeadersBoardGame.GameLogic.Handlers;
 
 public abstract class CharacterActionHandler : IActionHandler
 {

@@ -1,7 +1,8 @@
+namespace LeadersBoardGame.GameLogic.Handlers;
+
+using System;
 using LeadersBoardGame.GameLogic.Actions;
 using LeadersBoardGame.GameLogic.Entities;
-
-namespace LeadersBoardGame.GameLogic.Handlers;
 
 public class BanishmentActionHandler : IActionHandler
 {
@@ -17,13 +18,11 @@ public class BanishmentActionHandler : IActionHandler
 
     public void DoAction()
     {
-        _game.RecruitableCards.Remove(Action.Card);
-        _game.History.Add(Action);
+        throw new NotImplementedException();
     }
 
     public void UndoAction()
     {
-        _game.RecruitableCards.Add(Action.Card);
-        _game.History.Remove(Action);
+        throw new NotImplementedException();
     }
 }
