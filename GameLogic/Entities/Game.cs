@@ -13,12 +13,11 @@ public class Game
     public Board Board { get; }
     public GameMode GameMode { get; }
     public List<CharacterCard> RecruitableCards { get; }
-    public Dictionary<Character, CharacterState> CharacterStates { get; }
     public List<IGameAction> History;
 
     public Game(Player[] players, Player firstPlayer, Player currentPlayer, TurnPhase currentPhase,
                 Board board, GameMode gameMode, List<CharacterCard> recruitableCards, 
-                Dictionary<Character, CharacterState> characterStates, List<IGameAction> history)
+                List<IGameAction> history)
     {
         Players = players;
         FirstPlayer = firstPlayer;
@@ -27,7 +26,6 @@ public class Game
         Board = board;
         GameMode = gameMode;
         RecruitableCards = recruitableCards;
-        CharacterStates = characterStates;
         History = history;
     }
 }
