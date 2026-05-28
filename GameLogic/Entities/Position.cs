@@ -10,8 +10,4 @@ public class Position
         X = x;
         Y = y;
     }
-
-    public Position(Position refPosition) : this(refPosition.X, refPosition.Y)
-    {
-    }
 }

@@ -2,7 +2,7 @@ namespace LeadersBoardGame.GameLogic.Enums;
 
 public enum GameActionType
 {
-    PhaseChange,
+    Transition,
     CharacterAction,
     Recruitment,
     Banishment

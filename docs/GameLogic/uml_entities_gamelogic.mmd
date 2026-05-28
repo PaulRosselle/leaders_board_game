@@ -19,6 +19,7 @@ classDiagram
     %% Interfaces
     class IHistoryEntry {
         <<interface>>
+        +Team : TeamColor
     }
 
     class ISegment {
@@ -37,13 +38,10 @@ classDiagram
     class ActionsPhase
     class RecruitmentPhase
     class TurnEndPhase
-    class BanishmentPhase {
-        +Author : TeamColor
-    }
+    class BanishmentPhase
 
     %% Turn
     class Turn {
-        +TeamColor : TeamColor
         +TurnStartPhase : TurnStartPhase
         +ActionsPhase : ActionsPhase
         +RecruitmentPhase : RecruitmentPhase
@@ -55,6 +53,7 @@ classDiagram
         +Players : List~Player~
         +FirstPlayer : Player
         +GameMode : GameMode
+        +InitialRecruitableCards : List~CharacterCard~
         +InitialPlacements : List~RecruitmentAction~
     }
 
@@ -86,11 +85,7 @@ classDiagram
 
     class Player {
         +Name : String
-        +Color : TeamColor
-        +WarningCount : Integer
-        +BannishedCards : List~CharacterCard~
-        +RecruitedCharacters : List~Character~
-        +GetCharacterCards() List~CharacterCard~
+        +Team : TeamColor
     }
 
     %% Héritage interfaces

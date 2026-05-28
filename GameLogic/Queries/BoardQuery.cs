@@ -1,9 +1,9 @@
+namespace LeadersBoardGame.GameLogic.Queries;
+
 using System;
 using System.Collections.Generic;
 using LeadersBoardGame.GameLogic.Entities;
 using LeadersBoardGame.GameLogic.Enums;
-
-namespace LeadersBoardGame.GameLogic.Queries;
 
 public static class BoardQuery
 {
@@ -141,18 +141,18 @@ public static class BoardQuery
     /// <exception cref="InvalidOperationException">
     /// Thrown if the character is not on the board during the call. This indicates a programming error.
     /// </exception>
-    public static Cell GetCharacterCellById(Board board, int pieceId)
+    public static Cell GetCharacterCellById(Board board, Guid characterId)
     {
         foreach (Cell[] columnCells in board.Cells)
         {
             foreach (Cell cell in columnCells)
             {
-                if (cell.Character is not null && cell.Character.Id == pieceId)
+                if (cell.Character is not null && cell.Character.Id == characterId)
                 {
                     return cell;
                 }
             }
         }
-        throw new InvalidOperationException($"No piece found on the board with id {pieceId}");
+        throw new InvalidOperationException($"No piece found on the board with id {characterId}");
     }
 }

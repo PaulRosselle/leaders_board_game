@@ -4,15 +4,15 @@ using System;
 using LeadersBoardGame.GameLogic.Actions;
 using LeadersBoardGame.GameLogic.Entities;
 
-public class RecruitmentActionHandler : IActionHandler
+public class TransitionActionHandler : IActionHandler
 {
     public Game Game { get; }
 
     public GameHistory History { get; }
 
-    public RecruitmentAction Action { get; }
+    public TransitionAction Action { get; }
 
-    public RecruitmentActionHandler(Game game, GameHistory history, RecruitmentAction action)
+    public TransitionActionHandler(Game game, GameHistory history, TransitionAction action)
     {
         Game = game;
         History = history;

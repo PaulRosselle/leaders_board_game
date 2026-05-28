@@ -4,7 +4,7 @@ namespace LeadersBoardGame.GameLogic.Factories;
 
 public static class BoardFactory
 {
-    private static byte s_columns_count = 7;
+    private const int s_columns_count = 7;
 
     /// <summary>
     /// Returns a board initialized with the necessary board dimensions

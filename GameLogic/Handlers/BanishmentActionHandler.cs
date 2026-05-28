@@ -1,29 +1,32 @@
+namespace LeadersBoardGame.GameLogic.Handlers;
+
+using System;
 using LeadersBoardGame.GameLogic.Actions;
 using LeadersBoardGame.GameLogic.Entities;
 
-namespace LeadersBoardGame.GameLogic.Handlers;
-
 public class BanishmentActionHandler : IActionHandler
 {
-    private readonly Game _game;
-    public Game Game => _game;
+    public Game Game { get; }
+
+    public GameHistory History { get; }
+
     public BanishmentAction Action { get; }
 
-    public BanishmentActionHandler(Game game, BanishmentAction action)
+
+    public BanishmentActionHandler(Game game, GameHistory history, BanishmentAction action)
     {
-        _game = game;
+        Game = game;
+        History = history;
         Action = action;
     }
 
     public void DoAction()
     {
-        _game.RecruitableCards.Remove(Action.Card);
-        _game.History.Add(Action);
+        throw new NotImplementedException();
     }
 
     public void UndoAction()
     {
-        _game.RecruitableCards.Add(Action.Card);
-        _game.History.Remove(Action);
+        throw new NotImplementedException();
     }
 }

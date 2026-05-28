@@ -1,6 +1,6 @@
-using LeadersBoardGame.GameLogic.Enums;
-
 namespace LeadersBoardGame.GameLogic.Actions;
+
+using LeadersBoardGame.GameLogic.Enums;
 
 public interface IGameAction
 {

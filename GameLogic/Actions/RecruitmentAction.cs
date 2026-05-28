@@ -1,14 +1,14 @@
+namespace LeadersBoardGame.GameLogic.Actions;
+
 using LeadersBoardGame.GameLogic.Entities;
 using LeadersBoardGame.GameLogic.Enums;
-
-namespace LeadersBoardGame.GameLogic.Actions;
 
 public class RecruitmentAction : IGameAction
 {
     public GameActionType ActionType => GameActionType.Recruitment;
 
-    public Character Character;
-    public Position DestPos;
+    public Character Character { get; }
+    public Position DestPos { get; }
 
     public RecruitmentAction(Character character, Position destPos)
     {

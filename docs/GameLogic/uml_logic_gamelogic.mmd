@@ -5,11 +5,15 @@ classDiagram
     class Game {
         +Board : Board
         +RecruitableCards : List~CharacterCard~
+        +RecruitedCharacters : List~Character~
+        +BanishedCards : List~CharacterCard~
     }
 
     %% Handlers
     class IActionHandler {
         <<interface>>
+        +Game : Game
+        +History : GameHistory
         +DoAction()
         +UndoAction()
     }
