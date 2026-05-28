@@ -1,9 +1,9 @@
+namespace LeadersBoardGame.GameLogic.Queries;
+
 using System;
 using System.Collections.Generic;
 using LeadersBoardGame.GameLogic.Entities;
 using LeadersBoardGame.GameLogic.Enums;
-
-namespace LeadersBoardGame.GameLogic.Queries;
 
 public static class BoardQuery
 {
