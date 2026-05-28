@@ -128,30 +128,15 @@ public abstract class CharacterActionResolver
     /// </summary>
     public List<CharacterAction> GetMovementActions()
     {
-        List<CharacterAction> movementActions = [];
-        foreach (Cell targetCell in GetActiveAbilityTargets())
+        List<CharacterAction> activeAbilityActions = [];
+        foreach (Cell destCell in GetMovementDestinations())
         {
-            if (IsTargetMovementDestinationRequired())
-            {
-                foreach (Cell destCell in GetTargetMovementDestinations(targetCell))
-                {
-                    // TODO
-                    // 1. generate the action using CharacterActionFactory
-                    // 2. add the action to movementActions
-                    throw new NotImplementedException();
-                }
-            }
-            else
-            {
-                // TODO
-                // 1. generate the action using CharacterActionFactory
-                // 2. add the action to movementActions
-                throw new NotImplementedException();
-            }
+            // TODO
+            // 1. generate the action
+            // 2. add the action to activeAbilityActions
         }
-        
         // We filter out every invalid actions
-        return GetValidActions(movementActions);
+        return GetValidActions(activeAbilityActions);
     }
 
     /// <summary>
@@ -160,14 +145,29 @@ public abstract class CharacterActionResolver
     /// <returns></returns>
     public List<CharacterAction> GetActiveAbilityActions()
     {
-        List<CharacterAction> activeAbilityActions = [];
-        foreach (Cell destCell in GetMovementDestinations())
+        List<CharacterAction> movementActions = [];
+        foreach (Cell targetCell in GetActiveAbilityTargets())
         {
-            // TODO
-            // 1. generate the action using CharacterActionFactory
-            // 2. add the action to activeAbilityActions
+            if (IsTargetMovementDestinationRequired())
+            {
+                foreach (Cell destCell in GetTargetMovementDestinations(targetCell))
+                {
+                    // TODO
+                    // 1. generate the action
+                    // 2. add the action to movementActions
+                    throw new NotImplementedException();
+                }
+            }
+            else
+            {
+                // TODO
+                // 1. generate the action
+                // 2. add the action to movementActions
+                throw new NotImplementedException();
+            }
         }
+        
         // We filter out every invalid actions
-        return GetValidActions(activeAbilityActions);
+        return GetValidActions(movementActions);
     }
 }

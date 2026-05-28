@@ -4,12 +4,12 @@ namespace LeadersBoardGame.GameLogic.Entities;
 
 public class Player
 {
-    public TeamColor Color { get; }
-    public string Team { get; }
+    public TeamColor Team { get; }
+    public string Name { get; }
 
-    public Player(TeamColor color, string team)
+    public Player(TeamColor team, string name)
     {
-        Color = color;
         Team = team;
+        Name = name;
     }
 }

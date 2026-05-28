@@ -190,12 +190,12 @@ public static class GameQuery
 
         // Then we check if 4 or more of the player's characters are chained
         bool hasChainOfFour = false;
-        while (playerCharacterCells.Count > 0)
+        while (!hasChainOfFour && playerCharacterCells.Count > 0)
         {
+            // GetConnectedCells mutates "playerCharacterCells" to remove found connected cells 
             if (GetConnectedCells(game.Board, playerCharacterCells[0], playerCharacterCells).Count >= 4)
             {
                 hasChainOfFour = true;
-                break;
             }
         }
         if (!hasChainOfFour)

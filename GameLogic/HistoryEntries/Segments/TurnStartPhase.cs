@@ -1,4 +1,4 @@
-namespace LeadersBoardGame.GameLogic.HistoryEntries.Phases;
+namespace LeadersBoardGame.GameLogic.HistoryEntries.Segments;
 
 using System.Collections.Generic;
 using LeadersBoardGame.GameLogic.Actions;
