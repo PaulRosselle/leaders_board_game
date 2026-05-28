@@ -9,9 +9,4 @@ public class Cell
     {
         Pos = pos;
     }
-
-    public Cell(Cell refCell) : this(new Position(refCell.Pos))
-    {
-        Character = refCell.Character is null ? null : new Character(refCell.Character);
-    }
 }

@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using LeadersBoardGame.GameLogic.Actions;
 using LeadersBoardGame.GameLogic.Enums;
 
-public class BanishmentPhase : IHistoryEntry, IPhase, ISegment
+public class BanishmentPhase : IHistoryEntry, ISegment, IPhase
 {
     public TeamColor Team => throw new System.NotImplementedException();
 
