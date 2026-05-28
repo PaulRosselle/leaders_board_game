@@ -12,20 +12,55 @@ classDiagram
         <<enumeration>>
     }
 
-    class PlayPermission {
+    class GameMode {
         <<enumeration>>
-        Forbidden
-        Allowed
-        Mandatory
     }
 
-    class TurnPhaseType {
-        <<enumeration>>
-        Start
-        Action
-        Recruitment
-        Banishment
-        End
+    %% Interfaces
+    class IHistoryEntry {
+        <<interface>>
+    }
+
+    class ISegment {
+        <<interface>>
+        +StartAction : IGameAction
+        +EndAction : IGameAction
+    }
+
+    class IPhase {
+        <<interface>>
+        +Actions : List~IGameAction~
+    }
+
+    %% Phases
+    class TurnStartPhase
+    class ActionsPhase
+    class RecruitmentPhase
+    class TurnEndPhase
+    class BanishmentPhase {
+        +Author : TeamColor
+    }
+
+    %% Turn
+    class Turn {
+        +TeamColor : TeamColor
+        +TurnStartPhase : TurnStartPhase
+        +ActionsPhase : ActionsPhase
+        +RecruitmentPhase : RecruitmentPhase
+        +TurnEndPhase : TurnEndPhase
+    }
+
+    %% History
+    class GameConfig {
+        +Players : List~Player~
+        +FirstPlayer : Player
+        +GameMode : GameMode
+        +InitialPlacements : List~RecruitmentAction~
+    }
+
+    class GameHistory {
+        +Config : GameConfig
+        +Entries : List~IHistoryEntry~
     }
 
     %% Entités
@@ -35,25 +70,13 @@ classDiagram
     }
 
     class Character {
+        +Id : Guid
         +Type : CharacterType
         +Color : TeamColor
     }
 
-    class CharacterState {
-        +Playability : PlayPermission
-        +AbilityBlockedBy : List~CharacterType~
-        +TransformedInto : CharacterType
-    }
-
-    class CharacterContext {
-        +Character : Character
-        +State : CharacterState
-        +Position : Position
-    }
-
     class Cell {
         +Pos : Position
-        +Tile : Tile
         +Character : Character
     }
 
@@ -65,27 +88,37 @@ classDiagram
         +Name : String
         +Color : TeamColor
         +WarningCount : Integer
+        +BannishedCards : List~CharacterCard~
+        +RecruitedCharacters : List~Character~
+        +GetCharacterCards() List~CharacterCard~
     }
 
-    class TurnPhase {
-        +PhaseType : TurnPhaseType
-        +PhasePlayer : Player
-    }
+    %% Héritage interfaces
+    ISegment <|-- IPhase
+    IPhase <|.. TurnStartPhase
+    IPhase <|.. ActionsPhase
+    IPhase <|.. RecruitmentPhase
+    IPhase <|.. TurnEndPhase
+    IPhase <|.. BanishmentPhase
+    ISegment <|.. Turn
+    IHistoryEntry <|.. Turn
+    IHistoryEntry <|.. BanishmentPhase
 
     %% Relations structurelles
+    GameHistory --> GameConfig
+    GameHistory --> IHistoryEntry
+    Turn --> TurnStartPhase
+    Turn --> ActionsPhase
+    Turn --> RecruitmentPhase
+    Turn --> TurnEndPhase
+    Turn --> TeamColor
+    BanishmentPhase --> TeamColor
     Board "1" --> "0..*" Cell
     Cell --> Position
     Cell "0..1" --> "0..1" Character
-    CharacterContext --> Character
-    CharacterContext --> CharacterState
-    CharacterContext --> Position
-    TurnPhase --> Player
 
     %% Relations vers enums
     Character --> CharacterType
     Character --> TeamColor
-    CharacterState --> PlayPermission
-    CharacterState --> CharacterType : AbilityBlockedBy
-    CharacterState ..> CharacterType : TransformedInto
     Player --> TeamColor
-    TurnPhase --> TurnPhaseType
+    GameConfig --> GameMode
