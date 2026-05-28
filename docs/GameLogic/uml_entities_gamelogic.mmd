@@ -19,6 +19,7 @@ classDiagram
     %% Interfaces
     class IHistoryEntry {
         <<interface>>
+        +Team : TeamColor
     }
 
     class ISegment {
@@ -37,13 +38,10 @@ classDiagram
     class ActionsPhase
     class RecruitmentPhase
     class TurnEndPhase
-    class BanishmentPhase {
-        +Author : TeamColor
-    }
+    class BanishmentPhase
 
     %% Turn
     class Turn {
-        +TeamColor : TeamColor
         +TurnStartPhase : TurnStartPhase
         +ActionsPhase : ActionsPhase
         +RecruitmentPhase : RecruitmentPhase
