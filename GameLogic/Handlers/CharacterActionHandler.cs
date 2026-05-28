@@ -19,40 +19,11 @@ public abstract class CharacterActionHandler : IActionHandler
     }
 
     /// <summary>
-    /// Returns as a single list every action detail of the handled action
-    /// </summary>
-    /// <returns></returns>
-    protected List<CharacterActionDetail> GetAllDetails()
-    {
-        List<CharacterActionDetail> allDetails = [Action.Source, .. Action.Targets];
-        return allDetails;
-    }
-
-    /// <summary>
     /// Applies the Action effects to the game
     /// </summary>
     public virtual void DoAction()
     {
-        // The default bevahior is to move every character with an action detail to its destination.
-        List<CharacterActionDetail> actionDetails = GetAllDetails();
-        // First, we remove the pieces with a valid destination from their original position
-        foreach (CharacterActionDetail actionDetail in actionDetails)
-        {
-            if (actionDetail.DestPos is not null)
-            {
-                BoardQuery.GetCell(Game.Board, actionDetail.OriginPos).Character = null;
-            }
-        }
-        // Then we add them to their destination
-        foreach (CharacterActionDetail actionDetail in actionDetails)
-        {
-            if (actionDetail.DestPos is not null)
-            {
-                BoardQuery.GetCell(Game.Board, actionDetail.DestPos).Character = actionDetail.Character;
-            }
-        }
-        // Finally, we add the action to the game's history
-        Game.History.Add(Action);
+        throw new NotImplementedException();
     }
 
     // <summary>
@@ -60,22 +31,6 @@ public abstract class CharacterActionHandler : IActionHandler
     /// </summary>
     public virtual void UndoAction()
     {
-        // The default behavior is to move back every character with an action detail to its original position.
-        List<CharacterActionDetail> actionDetails = GetAllDetails();
-        // First, we remove the pieces from their destination
-        foreach (CharacterActionDetail actionDetail in actionDetails)
-        {
-            if (actionDetail.DestPos is not null)
-            {
-                BoardQuery.GetCell(Game.Board, actionDetail.DestPos).Character = null;
-            }
-        }
-        // Then we add them back to their original position
-        foreach (CharacterActionDetail actionDetail in actionDetails)
-        {
-            BoardQuery.GetCell(Game.Board, actionDetail.OriginPos).Character = actionDetail.Character;
-        }
-        // Finally, we remove the action from the game's history
-        Game.History.Remove(Action);
+        throw new NotImplementedException();
     }
 }
