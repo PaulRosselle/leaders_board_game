@@ -6,13 +6,16 @@ using System;
 
 public class CharacterActionHandler : IActionHandler
 {
-    protected Game _game;
-    public Game Game => _game;
+    public Game Game { get; }
+
+    public GameHistory History { get; }
+
     protected CharacterAction Action { get; }
 
-    public CharacterActionHandler(Game game, CharacterAction action)
+    public CharacterActionHandler(Game game, GameHistory history, CharacterAction action)
     {
-        _game = game;
+        Game = game;
+        History = history;
         Action = action;
     }
 

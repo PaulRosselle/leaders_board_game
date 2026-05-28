@@ -6,13 +6,16 @@ using LeadersBoardGame.GameLogic.Entities;
 
 public class RecruitmentActionHandler : IActionHandler
 {
-    private readonly Game _game;
-    public Game Game => _game;
+    public Game Game { get; }
+
+    public GameHistory History { get; }
+
     public RecruitmentAction Action { get; }
 
-    public RecruitmentActionHandler(Game game, RecruitmentAction action)
+    public RecruitmentActionHandler(Game game, GameHistory history, RecruitmentAction action)
     {
-        _game = game;
+        Game = game;
+        History = history;
         Action = action;
     }
 

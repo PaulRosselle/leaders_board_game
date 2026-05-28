@@ -6,13 +6,12 @@ using LeadersBoardGame.GameLogic.Entities;
 
 public class BanishmentActionHandler : IActionHandler
 {
-    private readonly Game _game;
-    public Game Game => _game;
+    public Game Game { get; }
     public BanishmentAction Action { get; }
 
     public BanishmentActionHandler(Game game, BanishmentAction action)
     {
-        _game = game;
+        Game = game;
         Action = action;
     }
 

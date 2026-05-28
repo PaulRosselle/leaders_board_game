@@ -6,13 +6,16 @@ using LeadersBoardGame.GameLogic.Entities;
 
 public class TransitionActionHandler : IActionHandler
 {
-    private readonly Game _game;
-    public Game Game => _game;
+    public Game Game { get; }
+
+    public GameHistory History { get; }
+
     public TransitionAction Action { get; }
 
-    public TransitionActionHandler(Game game, TransitionAction action)
+    public TransitionActionHandler(Game game, GameHistory history, TransitionAction action)
     {
-        _game = game;
+        Game = game;
+        History = history;
         Action = action;
     }
 
