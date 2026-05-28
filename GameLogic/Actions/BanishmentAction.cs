@@ -8,11 +8,11 @@ public class BanishmentAction : IGameAction
     public GameActionType ActionType => GameActionType.Banishment;
 
     public CharacterCard Card { get; }
-    public Player Author { get; }
+    public TeamColor Team { get; }
 
-    public BanishmentAction(CharacterCard card, Player author)
+    public BanishmentAction(CharacterCard card, TeamColor team)
     {
         Card = card;
-        Author = author;
+        Team = team;
     }
 }

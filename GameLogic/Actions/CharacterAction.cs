@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using LeadersBoardGame.GameLogic.Entities;
 using LeadersBoardGame.GameLogic.Enums;
 
 namespace LeadersBoardGame.GameLogic.Actions;
@@ -8,12 +9,12 @@ public class CharacterAction : IGameAction
     public GameActionType ActionType => GameActionType.CharacterAction;
 
     public bool IsActiveAbility { get; }
-    public CharacterActionDetail Source { get; }
-    public List<CharacterActionDetail> Targets { get; }
+    public Character SourceCharacter { get; }
+    public List<CharacterActionTarget> Targets { get; }
 
-    public CharacterAction(CharacterActionDetail source, List<CharacterActionDetail> targets, bool isActiveAbility)
+    public CharacterAction(Character sourceCharacter, List<CharacterActionTarget> targets, bool isActiveAbility)
     {
-        Source = source;
+        SourceCharacter = sourceCharacter;
         Targets = targets;
         IsActiveAbility = isActiveAbility;
     }
