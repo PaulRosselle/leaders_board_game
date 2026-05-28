@@ -1,6 +1,6 @@
-using LeadersBoardGame.GameLogic.Entities;
-
 namespace LeadersBoardGame.GameLogic.Actions;
+
+using LeadersBoardGame.GameLogic.Entities;
 
 public class CharacterActionTarget
 {

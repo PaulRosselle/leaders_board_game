@@ -1,7 +1,7 @@
+namespace LeadersBoardGame.GameLogic.Actions;
+
 using LeadersBoardGame.GameLogic.Entities;
 using LeadersBoardGame.GameLogic.Enums;
-
-namespace LeadersBoardGame.GameLogic.Actions;
 
 public class RecruitmentAction : IGameAction
 {

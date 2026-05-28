@@ -1,8 +1,8 @@
+namespace LeadersBoardGame.GameLogic.Actions;
+
 using System.Collections.Generic;
 using LeadersBoardGame.GameLogic.Entities;
 using LeadersBoardGame.GameLogic.Enums;
-
-namespace LeadersBoardGame.GameLogic.Actions;
 
 public class CharacterAction : IGameAction
 {

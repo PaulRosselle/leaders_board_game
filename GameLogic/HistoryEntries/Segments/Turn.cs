@@ -7,9 +7,9 @@ public class Turn : IHistoryEntry, ISegment
 {
     public TeamColor Team => throw new System.NotImplementedException();
 
-    public IGameAction StartAction => throw new System.NotImplementedException();
+    public TransitionAction StartAction => throw new System.NotImplementedException();
 
-    public IGameAction EndAction => throw new System.NotImplementedException();
+    public TransitionAction EndAction => throw new System.NotImplementedException();
 
     public TransitionTarget Transition => TransitionTarget.Turn;
 
