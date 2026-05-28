@@ -4,7 +4,7 @@ using LeadersBoardGame.GameLogic.Entities;
 using LeadersBoardGame.GameLogic.Actions;
 using System;
 
-public abstract class CharacterActionHandler : IActionHandler
+public class CharacterActionHandler : IActionHandler
 {
     protected Game _game;
     public Game Game => _game;
@@ -19,7 +19,7 @@ public abstract class CharacterActionHandler : IActionHandler
     /// <summary>
     /// Applies the Action effects to the game
     /// </summary>
-    public virtual void DoAction()
+    public void DoAction()
     {
         throw new NotImplementedException();
     }
@@ -27,7 +27,7 @@ public abstract class CharacterActionHandler : IActionHandler
     // <summary>
     /// Reverts the Action effects on the game
     /// </summary>
-    public virtual void UndoAction()
+    public void UndoAction()
     {
         throw new NotImplementedException();
     }
