@@ -1,22 +1,10 @@
 classDiagram
     direction TB
 
-    %% Enums
-    class CharacterType {
-        <<enumeration>>
-    }
-
     %% Game
     class Game {
-        +Players : List~Player~
-        +FirstPlayer : Player
-        +CurrentPlayer : Player
-        +CurrentPhase : TurnPhase
         +Board : Board
-        +GameMode : GameMode
         +RecruitableCards : List~CharacterCard~
-        CharacterStates : Dictionary~Character, CharacterState~
-        +History : List~IGameAction~
     }
 
     %% Handlers
@@ -25,21 +13,23 @@ classDiagram
         +DoAction()
         +UndoAction()
     }
-    class PhaseChangeActionHandler
+    class TransitionActionHandler
     class RecruitmentActionHandler
     class BanishmentActionHandler
-    class CharacterActionHandler {
-        <<abstract>>
-    }
+    class CharacterActionHandler
 
     %% Resolvers
     class CharacterActionResolver {
         <<abstract>>
-        +GetMovementActions()
-        +GetActiveAbilityActions()
+        +GetMovementActions() List~CharacterAction~
+        +GetActiveAbilityActions() List~CharacterAction~
     }
 
-    %% Query
+    class RecruitmentActionResolver {
+        +GetRecruitmentActions(CharacterCard) List~RecruitmentAction~
+    }
+
+    %% Queries
     class BoardQuery {
         <<static>>
         +GetCell() Cell
@@ -56,73 +46,78 @@ classDiagram
         +IsBarrageDetected() Boolean
     }
 
+    class PlayabilityQuery {
+        <<static>>
+        +CanAct(Character, Game, GameHistory) Boolean
+        +MustAct(Character, Game, GameHistory) Boolean
+        +CanUseActiveAbility(Character, Game, GameHistory) Boolean
+        +GetPlayableCharacters(Game, GameHistory) List~Cell~
+    }
+
     %% Factories
     class BoardFactory {
         <<static>>
-        +Create()
+        +Create() Board
     }
     class GameFactory {
         <<static>>
-        +Create() Game
+        +Create(GameConfig, GameHistory) Game
     }
     class CharacterFactory {
         <<static>>
-        +Create()
-    }
-    class CharacterActionFactory {
-        <<static>>
-        +CreateMovement()
-        +CreateAbilityActivation()
+        +Create() Character
+        +Transform(Character, CharacterType, TeamColor) Character
     }
     class CharacterActionResolverFactory {
         <<static>>
         +Create(type : CharacterType) CharacterActionResolver
     }
-    class CharacterActionHandlerFactory {
-        <<static>>
-        +Create(type : CharacterType) CharacterActionHandler
-    }
 
     %% GameHandler
     class GameHandler {
         +CurrentGame : Game
-        +GetPlayableCharacters() List~CharacterContext~
-        +GetMovementActions() List~CharacterAction~
-        +GetActiveAbilityActions() List~CharacterAction~
-        +GetRecruitmentActions() List~RecruitmentAction~
-        +GetBanishmentActions() List~BanishmentAction~
-        +DoAction()
+        +CurrentHistory : GameHistory
+        +GetGameMode() GameMode
+        +GetPlayers Player[]
+        +GetCurrentPlayer() Player
+        +GetPlayableCharacters() List~Cell~
+        +GetMovementActions(Character) List~CharacterAction~
+        +GetActiveAbilityActions(Character) List~CharacterAction~
+        +GetRecruitmentActions(Character) List~RecruitmentAction~
+        +GetBanishmentAction(Character) BanishmentAction
+        +DoAction(IGameAction)
         +UndoLastAction()
-        +IsGameOver() Boolean
+        +GetWinner() Player
     }
 
     %% Héritage handlers
-    IActionHandler <|.. PhaseChangeActionHandler
+    IActionHandler <|.. TransitionActionHandler
     IActionHandler <|.. RecruitmentActionHandler
     IActionHandler <|.. BanishmentActionHandler
     IActionHandler <|.. CharacterActionHandler
 
-    %% GameFactory produit Game
+    %% GameFactory
     GameFactory ..> BoardFactory
     GameFactory ..> CharacterFactory
     GameFactory ..> Game
 
     %% GameHandler
     GameHandler --> Game
+    GameHandler --> GameHistory
     GameHandler --> CharacterActionResolverFactory
-    GameHandler --> CharacterActionHandlerFactory
     GameHandler ..> CharacterActionResolver
+    GameHandler ..> RecruitmentActionResolver
     GameHandler ..> IActionHandler
     GameHandler --> GameQuery
+    GameHandler --> PlayabilityQuery
 
-    %% Resolver
+    %% Resolvers
     CharacterActionResolver ..> BoardQuery
     CharacterActionResolver ..> GameQuery
-    CharacterActionResolver ..> CharacterActionFactory
+    RecruitmentActionResolver ..> BoardQuery
     CharacterActionResolverFactory ..> CharacterActionResolver
-    CharacterActionResolverFactory --> CharacterType
-    CharacterActionHandlerFactory ..> CharacterActionHandler
-    CharacterActionHandlerFactory --> CharacterType
 
-    %% GameQuery
+    %% Queries
     GameQuery ..> Game
+    PlayabilityQuery ..> Game
+    PlayabilityQuery ..> GameHistory

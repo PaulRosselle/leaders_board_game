@@ -4,10 +4,26 @@ classDiagram
     %% Enums
     class GameActionType {
         <<enumeration>>
-        PhaseChange
+        Transition
         CharacterAction
         Recruitment
         Banishment
+    }
+
+    class TransitionType {
+        <<enumeration>>
+        Start
+        End
+    }
+
+    class TransitionTarget {
+        <<enumeration>>
+        Turn
+        TurnStart
+        ActionsPhase
+        RecruitmentPhase
+        TurnEnd
+        BanishmentPhase
     }
 
     %% Interface
@@ -16,38 +32,42 @@ classDiagram
         +ActionType : GameActionType
     }
 
-    %% Actions concrètes
-    class PhaseChangeAction {
-        +PreviousPhase : TurnPhase
-        +NewPhase : TurnPhase
+    %% Actions
+    class TransitionAction {
+        +TransitionType : TransitionType
+        +Target : TransitionTarget
     }
-    class CharacterActionDetail {
+
+    class CharacterActionTarget {
         +Character : Character
-        +OriginPos : Position
-        +DestPos : Position
-        +PreviousState : CharacterState
-        +NewState : CharacterState
+        +OriginPos : Position?
+        +DestPos : Position?
     }
+
     class CharacterAction {
         +IsActiveAbility : Boolean
-        +Source : CharacterActionDetail
-        +Targets : List~CharacterActionDetail~
+        +SourceCharacter : Character
+        +Targets : List~CharacterActionTarget~
     }
+
     class RecruitmentAction {
         +Character : Character
         +DestPos : Position
     }
+
     class BanishmentAction {
         +Card : CharacterCard
-        +Author : Player
+        +Team : TeamColor
     }
 
     %% Héritage
-    IGameAction <|.. PhaseChangeAction
+    IGameAction <|.. TransitionAction
     IGameAction <|.. CharacterAction
     IGameAction <|.. RecruitmentAction
     IGameAction <|.. BanishmentAction
 
     %% Relations
     IGameAction --> GameActionType
-    CharacterAction --> CharacterActionDetail
+    TransitionAction --> TransitionType
+    TransitionAction --> TransitionTarget
+    CharacterAction --> CharacterActionTarget
