@@ -4,8 +4,8 @@ public enum TransitionTarget
 {
     Turn,
     BanishmentPhase,
-    TurnStart,
+    TurnStartPhase,
     ActionsPhase,
     RecruitmentPhase,
-    TurnEnd
+    TurnEndPhase
 }
