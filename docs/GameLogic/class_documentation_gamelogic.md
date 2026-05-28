@@ -115,7 +115,7 @@ Represents a player banishing a character card. Records the targeted card and th
 ## Game
 
 ### `Game`
-The projection of the current game state. Derived entirely from `GameConfig` and `GameHistory`. Holds the board and the list of currently recruitable cards. Mutated exclusively through action handlers in response to changes in `GameHistory`. Never modified directly by external callers.
+The projection of the current game state. Derived entirely from `GameConfig` and `GameHistory`. Holds the board and lists related to the current recruitment state. Mutated exclusively through action handlers in response to changes in `GameHistory`. Never modified directly by external callers.
 
 ---
 

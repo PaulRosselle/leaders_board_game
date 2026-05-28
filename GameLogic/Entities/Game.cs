@@ -1,29 +1,21 @@
-using System.Collections.Generic;
-using LeadersBoardGame.GameLogic.Actions;
-using LeadersBoardGame.GameLogic.Enums;
-
 namespace LeadersBoardGame.GameLogic.Entities;
+
+using System.Collections.Generic;
+using LeadersBoardGame.GameLogic.Enums;
 
 public class Game
 {
-    public Player[] Players { get; }
-    public Player FirstPlayer { get; }
-    public Player CurrentPlayer { get; set; }
     public Board Board { get; }
-    public GameMode GameMode { get; }
     public List<CharacterCard> RecruitableCards { get; }
-    public List<IGameAction> History;
+    public List<Character> RecruitedCharacters { get; }
+    public List<CharacterCard> BannishedCards { get; }
 
-    public Game(Player[] players, Player firstPlayer, Player currentPlayer, 
-                Board board, GameMode gameMode, List<CharacterCard> recruitableCards, 
-                List<IGameAction> history)
+    public Game(Board board, List<CharacterCard> recruitableCards, 
+                List<Character> recruitedCharacters, List<CharacterCard> bannishedCards)
     {
-        Players = players;
-        FirstPlayer = firstPlayer;
-        CurrentPlayer = currentPlayer;
         Board = board;
-        GameMode = gameMode;
         RecruitableCards = recruitableCards;
-        History = history;
+        RecruitedCharacters = recruitedCharacters;
+        BannishedCards = bannishedCards;
     }
 }
