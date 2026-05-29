@@ -10,9 +10,6 @@ public class LeaderCharacterActionResolver : CharacterActionResolver
     {
     }
 
-    /// <summary>
-    /// Returns the movement max distance for the character based on its ability and external factors on the board
-    /// </summary>
     protected override int GetMovementMaxDistance()
     {
         // Passive ability : the vizier allows its leader to move to up to two cells per action
