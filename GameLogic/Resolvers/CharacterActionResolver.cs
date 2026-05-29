@@ -5,30 +5,40 @@ using LeadersBoardGame.GameLogic.Enums;
 using LeadersBoardGame.GameLogic.Entities;
 using LeadersBoardGame.GameLogic.Actions;
 using LeadersBoardGame.GameLogic.Queries;
+using LeadersBoardGame.GameLogic.Factories;
+using LeadersBoardGame.GameLogic.Handlers;
 
 namespace LeadersBoardGame.GameLogic.Resolvers;
 
 public abstract class CharacterActionResolver
 {
     protected Game Game { get; }
+
+    protected GameHistory History { get; }
+
     protected Character Character { get; }
+
     protected Cell CharacterCell { get; }
 
-    public CharacterActionResolver(Game game, Character character)
+    public CharacterActionResolver(Game game, GameHistory history, Character character)
     {
         Game = game;
+        History = history;
         Character = character;
         CharacterCell = BoardQuery.GetCharacterCellById(game.Board, character.Id);
     }
 
     protected bool IsValidAction(CharacterAction action)
     {
-        // TODO
-        // 1. call CharacterActionFactory and get the according actionHandler
-        // 2. call actionHandler.DoAction
-        // 3. test if the leader is captured/surrounded
-        // 4. call actionHandler.UndoAction
-        throw new NotImplementedException();
+        // To check if an action is valid we apply it to the game's projection
+        TeamColor teamColor = Character.Color;
+        IActionHandler actionHandler = GameActionHandlerFactory.Create(Game, action);
+        actionHandler.DoAction();
+        // Then we verify each validation condition (a character action is invalid if it captures or surround its allied leader)
+        bool isValid = !GameQuery.IsLeaderCaptured(Game, History, teamColor) && !GameQuery.IsLeaderSurrounded(Game, teamColor);
+        // And finally we revert the action's effect on the game's projection
+        actionHandler.UndoAction();
+        return isValid;
     }
 
     protected virtual List<CharacterAction> GetValidActions(List<CharacterAction> actions)
@@ -77,12 +87,6 @@ public abstract class CharacterActionResolver
     /// </summary>
     protected virtual int GetMovementMaxDistance()
     {
-        // Passive ability : the vizier allows its leader to move to up to two cells per action
-        if (Character.CharacterType.GetCharacterCard().IsLeader() && 
-            BoardQuery.FindCellsWithMatchingCharacter(Game.Board, Character.Color, CharacterType.Vizier).Count > 0)
-        {
-            return 2;
-        }
         // By default, a piece can move to an immediately adjacent cell
         return 1;
     }
@@ -100,16 +104,8 @@ public abstract class CharacterActionResolver
     /// </summary>
     protected virtual List<Cell> GetActiveAbilityTargets()
     {
-        // The most whitespread behavior is for a character to target itself using its ability
-        return [CharacterCell];
-    }
-
-    /// <summary>
-    /// Returns true if a destination is required for a targeted action to be valid
-    /// </summary>
-    protected virtual bool IsTargetMovementDestinationRequired()
-    {
-        return true;
+        // There is no default target behavior because of the variety of active abilities
+        return [];
     }
 
     /// <summary>
@@ -119,8 +115,33 @@ public abstract class CharacterActionResolver
     /// </summary>
     protected virtual List<Cell> GetTargetMovementDestinations(Cell targetCell)
     {
-        // The most whitespread behavior is for a target to be moved to an empty adjacent cell
-        return GetAdjacentEmptyCells(targetCell.Pos, 1);
+        // There is no default target movement behavior because of the variety of active abilities
+        return [];
+    }
+
+    /// <summary>
+    /// Generates and return every action using an active ability doable by the character
+    /// </summary>
+    protected virtual List<CharacterAction> GenerateActiveAbilityActions()
+    {
+        List<CharacterAction> activeAbilityActions = [];
+        // The active ability action generation moves by default the target
+        // to a destination since it is the most whitespread behavior
+        foreach (Cell targetCell in GetActiveAbilityTargets())
+        {
+            if (targetCell.Character is null)
+            {
+                throw new InvalidOperationException("Invalid active ability target : the targeted cell contains no character");
+            }
+            foreach (Cell targetDestCell in GetTargetMovementDestinations(targetCell))
+            {
+                CharacterActionTarget actionTarget = new CharacterActionTarget(targetCell.Character, targetCell.Pos, targetDestCell.Pos);
+                CharacterAction action = new CharacterAction(Character, [actionTarget], true);
+                activeAbilityActions.Add(action);
+            }
+        }
+
+        return activeAbilityActions;
     }
 
     /// <summary>
@@ -128,15 +149,16 @@ public abstract class CharacterActionResolver
     /// </summary>
     public List<CharacterAction> GetMovementActions()
     {
-        List<CharacterAction> activeAbilityActions = [];
+        List<CharacterAction> movementActions = [];
         foreach (Cell destCell in GetMovementDestinations())
         {
-            // TODO
-            // 1. generate the action
-            // 2. add the action to activeAbilityActions
+            // Movement actions only targets the sourceCharacter and require both an originPos and destPos
+            CharacterActionTarget actionTarget = new CharacterActionTarget(Character, CharacterCell.Pos, destCell.Pos);
+            CharacterAction action = new CharacterAction(Character, [actionTarget], false);
+            movementActions.Add(action);
         }
         // We filter out every invalid actions
-        return GetValidActions(activeAbilityActions);
+        return GetValidActions(movementActions);
     }
 
     /// <summary>
@@ -145,29 +167,7 @@ public abstract class CharacterActionResolver
     /// <returns></returns>
     public List<CharacterAction> GetActiveAbilityActions()
     {
-        List<CharacterAction> movementActions = [];
-        foreach (Cell targetCell in GetActiveAbilityTargets())
-        {
-            if (IsTargetMovementDestinationRequired())
-            {
-                foreach (Cell destCell in GetTargetMovementDestinations(targetCell))
-                {
-                    // TODO
-                    // 1. generate the action
-                    // 2. add the action to movementActions
-                    throw new NotImplementedException();
-                }
-            }
-            else
-            {
-                // TODO
-                // 1. generate the action
-                // 2. add the action to movementActions
-                throw new NotImplementedException();
-            }
-        }
-        
         // We filter out every invalid actions
-        return GetValidActions(movementActions);
+        return GetValidActions(GenerateActiveAbilityActions());
     }
 }

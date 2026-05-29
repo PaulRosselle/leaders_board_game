@@ -19,7 +19,7 @@ public static class GameFactory
         Game game = new Game(board, recruitableCards, recruitedCharacters, banishedCards);
 
         // The config contains every actions made before the game started (for initialization)
-        DoActions(game, gameHistory, [.. gameHistory.Config.InitialPlacements]);
+        DoActions(game, [.. gameHistory.Config.InitialPlacements]);
 
         // Once the game has been initialized fully, we can play every action in the history
         foreach (IHistoryEntry historyEntry in gameHistory.Entries)
@@ -28,25 +28,25 @@ public static class GameFactory
             if (historyEntry is Turn turn)
             {
                 // Actions in a turn are always played in this order : Start, ActionsPhase, RecruitmentPhase, End
-                DoActions(game, gameHistory, turn.TurnStart.Actions);
-                DoActions(game, gameHistory, turn.Actions.Actions);
-                DoActions(game, gameHistory, turn.Recruitment.Actions);
-                DoActions(game, gameHistory, turn.TurnEnd.Actions);
+                DoActions(game, turn.TurnStart.Actions);
+                DoActions(game, turn.Actions.Actions);
+                DoActions(game, turn.Recruitment.Actions);
+                DoActions(game, turn.TurnEnd.Actions);
             }
             else if (historyEntry is BanishmentPhase banishmentPhase)
             {
-                DoActions(game, gameHistory, banishmentPhase.Actions);
+                DoActions(game, banishmentPhase.Actions);
             }
         }
 
         return game;
     }
 
-    private static void DoActions(Game game, GameHistory gameHistory, List<IGameAction> actions)
+    private static void DoActions(Game game, List<IGameAction> actions)
     {
         foreach (IGameAction gameAction in actions)
         {
-            GameActionHandlerFactory.Create(game, gameHistory, gameAction).DoAction();
+            GameActionHandlerFactory.Create(game, gameAction).DoAction();
         }
     }
 }
