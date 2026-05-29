@@ -8,24 +8,23 @@ public class TransitionActionHandler : IActionHandler
 {
     public Game Game { get; }
 
-    public GameHistory History { get; }
-
     public TransitionAction Action { get; }
 
-    public TransitionActionHandler(Game game, GameHistory history, TransitionAction action)
+    public TransitionActionHandler(Game game, TransitionAction action)
     {
         Game = game;
-        History = history;
         Action = action;
     }
 
     public void DoAction()
     {
-        throw new NotImplementedException();
+        // Since transitions have no impact on the game projection, we have no treatment to do here.
+        // This class is kept to simplify the generic approach on IGameAction
     }
 
     public void UndoAction()
     {
-        throw new NotImplementedException();
+        // Since transitions have no impact on the game projection, we have no treatment to undo here.
+        // This class is kept to simplify the generic approach on IGameAction
     }
 }
