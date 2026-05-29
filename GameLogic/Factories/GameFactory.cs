@@ -42,7 +42,7 @@ public static class GameFactory
         return game;
     }
 
-    private static void DoActions(Game game List<IGameAction> actions)
+    private static void DoActions(Game game, List<IGameAction> actions)
     {
         foreach (IGameAction gameAction in actions)
         {

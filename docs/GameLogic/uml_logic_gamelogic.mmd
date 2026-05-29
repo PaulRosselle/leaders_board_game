@@ -44,16 +44,16 @@ classDiagram
 
     class GameQuery {
         <<static>>
-        +IsLeaderCaptured() Boolean
-        +IsLeaderSurrounded() Boolean
-        +IsBarrageDetected() Boolean
+        +IsLeaderCaptured(TeamColor, Game, GameHistory) Boolean
+        +IsLeaderSurrounded(TeamColor, Game) Boolean
+        +IsBarrageDetected(TeamColor, Game) Boolean
     }
 
     class PlayabilityQuery {
         <<static>>
-        +CanAct(Character, Game, GameHistory) Boolean
-        +MustAct(Character, Game, GameHistory) Boolean
-        +CanUseActiveAbility(Character, Game, GameHistory) Boolean
+        +CanAct(Game, GameHistory, Character) Boolean
+        +MustAct(Game, GameHistory, Character) Boolean
+        +CanUseActiveAbility(Game, GameHistory, Character) Boolean
         +GetPlayableCharacters(Game, GameHistory) List~Cell~
     }
 
@@ -128,5 +128,6 @@ classDiagram
 
     %% Queries
     GameQuery ..> Game
+    GameQuery ..> GameHistory
     PlayabilityQuery ..> Game
     PlayabilityQuery ..> GameHistory

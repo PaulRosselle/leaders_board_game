@@ -41,7 +41,7 @@ public static class GameQuery
     /// A leader is captured when enough opponent are placed in a position where they
     /// can take part to the capture. The required position depend of the character
     /// </summary>
-    public static bool IsLeaderCaptured(Game game, TeamColor leaderColor)
+    public static bool IsLeaderCaptured(Game game, GameHistory history, TeamColor leaderColor)
     {
         Cell leaderCell = BoardQuery.GetLeaderCell(game.Board, leaderColor);
         // A leader is captured when its capture value reaches "s_leader_capture_value".
