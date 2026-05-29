@@ -18,11 +18,13 @@ public class TransitionActionHandler : IActionHandler
 
     public void DoAction()
     {
-        throw new NotImplementedException();
+        // Since transitions have no impact on the game projection, we have no treatment to do here.
+        // This class is kept to simplify the generic approach on IGameAction
     }
 
     public void UndoAction()
     {
-        throw new NotImplementedException();
+        // Since transitions have no impact on the game projection, we have no treatment to undo here.
+        // This class is kept to simplify the generic approach on IGameAction
     }
 }
