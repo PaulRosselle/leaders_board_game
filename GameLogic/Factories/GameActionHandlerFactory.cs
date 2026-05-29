@@ -8,12 +8,12 @@ using LeadersBoardGame.GameLogic.Handlers;
 
 public static class GameActionHandlerFactory
 {
-    public static IActionHandler Create(Game game, GameHistory history, IGameAction action) => action.ActionType switch
+    public static IActionHandler Create(Game game, IGameAction action) => action.ActionType switch
     {
-        GameActionType.Transition => new TransitionActionHandler(game, history, (TransitionAction)action),
-        GameActionType.CharacterAction => new CharacterActionHandler(game, history, (CharacterAction)action),
-        GameActionType.Recruitment => new RecruitmentActionHandler(game, history, (RecruitmentAction)action),
-        GameActionType.Banishment => new BanishmentActionHandler(game, history, (BanishmentAction)action),
+        GameActionType.Transition => new TransitionActionHandler(game, (TransitionAction)action),
+        GameActionType.CharacterAction => new CharacterActionHandler(game, (CharacterAction)action),
+        GameActionType.Recruitment => new RecruitmentActionHandler(game, (RecruitmentAction)action),
+        GameActionType.Banishment => new BanishmentActionHandler(game, (BanishmentAction)action),
         _ => throw new InvalidOperationException($"No handler found for action type \"{action.ActionType}\""),
     };
 }

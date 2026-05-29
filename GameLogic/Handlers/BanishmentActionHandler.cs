@@ -7,15 +7,12 @@ public class BanishmentActionHandler : IActionHandler
 {
     public Game Game { get; }
 
-    public GameHistory History { get; }
-
     public BanishmentAction Action { get; }
 
 
-    public BanishmentActionHandler(Game game, GameHistory history, BanishmentAction action)
+    public BanishmentActionHandler(Game game, BanishmentAction action)
     {
         Game = game;
-        History = history;
         Action = action;
     }
 

@@ -8,14 +8,11 @@ public class CharacterActionHandler : IActionHandler
 {
     public Game Game { get; }
 
-    public GameHistory History { get; }
-
     protected CharacterAction Action { get; }
 
-    public CharacterActionHandler(Game game, GameHistory history, CharacterAction action)
+    public CharacterActionHandler(Game game, CharacterAction action)
     {
         Game = game;
-        History = history;
         Action = action;
     }
 

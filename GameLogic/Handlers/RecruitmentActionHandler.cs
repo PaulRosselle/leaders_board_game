@@ -8,14 +8,11 @@ public class RecruitmentActionHandler : IActionHandler
 {
     public Game Game { get; }
 
-    public GameHistory History { get; }
-
     public RecruitmentAction Action { get; }
 
-    public RecruitmentActionHandler(Game game, GameHistory history, RecruitmentAction action)
+    public RecruitmentActionHandler(Game game, RecruitmentAction action)
     {
         Game = game;
-        History = history;
         Action = action;
     }
 

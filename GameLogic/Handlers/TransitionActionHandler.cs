@@ -8,14 +8,11 @@ public class TransitionActionHandler : IActionHandler
 {
     public Game Game { get; }
 
-    public GameHistory History { get; }
-
     public TransitionAction Action { get; }
 
-    public TransitionActionHandler(Game game, GameHistory history, TransitionAction action)
+    public TransitionActionHandler(Game game, TransitionAction action)
     {
         Game = game;
-        History = history;
         Action = action;
     }
 
