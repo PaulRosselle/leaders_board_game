@@ -36,7 +36,8 @@ public class ClawLauncherCharacterActionResolver : CharacterActionResolver
         {
             foreach (Direction direction in Enum.GetValues<Direction>())
             {
-                if (GetTargetInDirection(direction) == targetCell && CharacterCell.AdjacentCells.TryGetValue(direction, out Cell? adjacentDestCell))
+                if (GetTargetInDirection(direction) == targetCell && 
+                    CharacterCell.AdjacentCells.TryGetValue(direction, out Cell? adjacentDestCell))
                 {
                     // We add the adjacent cell in the direction of the target (from the claw launcher's pov)
                     targetMovementDestCells.Add(adjacentDestCell);
@@ -50,7 +51,8 @@ public class ClawLauncherCharacterActionResolver : CharacterActionResolver
             foreach (Direction direction in Enum.GetValues<Direction>())
             {
                 Cell? destTargetCell = GetTargetInDirection(direction);
-                if (destTargetCell is not null && destTargetCell.AdjacentCells.TryGetValue(direction, out Cell? clawLauncherDestCell))
+                if (destTargetCell is not null && 
+                    destTargetCell.AdjacentCells.TryGetValue(direction.GetOpposite(), out Cell? clawLauncherDestCell))
                 {
                     // We add the adjacent cell in the direction of the claw launcher (from the target's pov)
                     targetMovementDestCells.Add(clawLauncherDestCell);

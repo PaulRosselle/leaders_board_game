@@ -4,7 +4,6 @@ using System;
 using System.Collections.Generic;
 using LeadersBoardGame.GameLogic.Entities;
 using LeadersBoardGame.GameLogic.Enums;
-using LeadersBoardGame.GameLogic.Queries;
 
 public class RiderCharacterActionResolver : CharacterActionResolver
 {
@@ -24,12 +23,10 @@ public class RiderCharacterActionResolver : CharacterActionResolver
         // The rider's active ability allows him to run by 2 cells in a straight line
         foreach (Direction direction in Enum.GetValues<Direction>())
         {
-            if (CharacterCell.AdjacentCells.TryGetValue(direction, out Cell? adjacentCell) && adjacentCell.Character is null)
+            if (CharacterCell.AdjacentCells.TryGetValue(direction, out Cell? adjacentCell) && adjacentCell.Character is null &&
+                adjacentCell.AdjacentCells.TryGetValue(direction, out Cell? targetDestCell) && targetDestCell.Character is null)
             {
-                if (adjacentCell.AdjacentCells.TryGetValue(direction, out Cell? targetDestCell) && targetDestCell.Character is null)
-                {
-                    targetMovementDestCells.Add(targetDestCell);
-                }
+                targetMovementDestCells.Add(targetDestCell);
             }
         }
         return targetMovementDestCells;

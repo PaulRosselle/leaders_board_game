@@ -4,7 +4,6 @@ using System;
 using System.Collections.Generic;
 using LeadersBoardGame.GameLogic.Entities;
 using LeadersBoardGame.GameLogic.Enums;
-using LeadersBoardGame.GameLogic.Queries;
 
 public class BrewmasterCharacterActionResolver : CharacterActionResolver
 {

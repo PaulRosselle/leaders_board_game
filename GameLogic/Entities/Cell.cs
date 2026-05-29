@@ -1,7 +1,7 @@
+namespace LeadersBoardGame.GameLogic.Entities;
+
 using System.Collections.Generic;
 using LeadersBoardGame.GameLogic.Enums;
-
-namespace LeadersBoardGame.GameLogic.Entities;
 
 public class Cell
 {

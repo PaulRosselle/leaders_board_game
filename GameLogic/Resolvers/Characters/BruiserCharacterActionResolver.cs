@@ -5,7 +5,6 @@ using System.Collections.Generic;
 using LeadersBoardGame.GameLogic.Actions;
 using LeadersBoardGame.GameLogic.Entities;
 using LeadersBoardGame.GameLogic.Enums;
-using LeadersBoardGame.GameLogic.Queries;
 
 public class BruiserCharacterActionResolver : CharacterActionResolver
 {
@@ -19,7 +18,8 @@ public class BruiserCharacterActionResolver : CharacterActionResolver
         // The bruiser's active ability only targets adjacent opponents
         foreach (Direction direction in Enum.GetValues<Direction>())
         {
-            if (CharacterCell.AdjacentCells.TryGetValue(direction, out Cell? adjacentCell) && adjacentCell.Character is not null && 
+            if (CharacterCell.AdjacentCells.TryGetValue(direction, out Cell? adjacentCell) && 
+                adjacentCell.Character is not null && 
                 adjacentCell.Character.Color != Character.Color)
             {
                 targetCells.Add(adjacentCell);
@@ -38,7 +38,8 @@ public class BruiserCharacterActionResolver : CharacterActionResolver
     {
         foreach (Direction direction in Enum.GetValues<Direction>())
         {
-            if (CharacterCell.AdjacentCells.TryGetValue(direction, out Cell? adjacentCell) && adjacentCell == targetCell)
+            if (CharacterCell.AdjacentCells.TryGetValue(direction, out Cell? adjacentCell) && 
+                adjacentCell == targetCell)
             {
                 return direction;
             }  
@@ -61,7 +62,8 @@ public class BruiserCharacterActionResolver : CharacterActionResolver
         foreach (Direction pushingDirection in pushingDirections)
         {
             // The target can only be pushed in an empty tile
-            if (targetCell.AdjacentCells.TryGetValue(pushingDirection, out Cell? adjacentCell) && adjacentCell.Character is null)
+            if (targetCell.AdjacentCells.TryGetValue(pushingDirection, out Cell? adjacentCell) && 
+                adjacentCell.Character is null)
             {
                 targetMovementDestCells.Add(adjacentCell);
             }

@@ -4,7 +4,6 @@ using System;
 using System.Collections.Generic;
 using LeadersBoardGame.GameLogic.Entities;
 using LeadersBoardGame.GameLogic.Enums;
-using LeadersBoardGame.GameLogic.Queries;
 
 public class AcrobatCharacterActionResolver : CharacterActionResolver
 {
@@ -51,12 +50,10 @@ public class AcrobatCharacterActionResolver : CharacterActionResolver
     private Cell? FindJumpDestination(Cell originCell, Direction direction)
     {
         // The acrobat can jump above any adjacent character if the next cell in the same direction is empty
-        if (originCell.AdjacentCells.TryGetValue(direction, out Cell? adjacentCell) && adjacentCell.Character is not null)
+        if (originCell.AdjacentCells.TryGetValue(direction, out Cell? adjacentCell) && adjacentCell.Character is not null &&
+            adjacentCell.AdjacentCells.TryGetValue(direction, out Cell? jumpDestCell) && jumpDestCell.Character is null)
         {
-            if (adjacentCell.AdjacentCells.TryGetValue(direction, out Cell? jumpDestCell) && jumpDestCell.Character is null)
-            {
-                return jumpDestCell;
-            }
+            return jumpDestCell;
         }
         return null;
     }
