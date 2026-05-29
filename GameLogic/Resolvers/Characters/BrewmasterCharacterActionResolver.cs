@@ -15,7 +15,7 @@ public class BrewmasterCharacterActionResolver : CharacterActionResolver
     protected override List<Cell> GetActiveAbilityTargets()
     {
         List<Cell> targetCells = [];
-        // The acrobat's active ability only targets adjacent allies
+        // The brewmaster's active ability only targets adjacent allies
         foreach (Direction direction in Enum.GetValues<Direction>())
         {
             Cell? adjacentCell = BoardQuery.FindAdjacentCell(Game.Board, CharacterCell, direction);
