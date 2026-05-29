@@ -124,8 +124,24 @@ public abstract class CharacterActionResolver
     /// </summary>
     protected virtual List<CharacterAction> GenerateActiveAbilityActions()
     {
-        // There is no default behavior because of the variety of active abilities
-        return [];
+        List<CharacterAction> activeAbilityActions = [];
+        // The active ability action generation moves by default the target
+        // to a destination since it is the most whitespread behavior
+        foreach (Cell targetCell in GetActiveAbilityTargets())
+        {
+            if (targetCell.Character is null)
+            {
+                throw new InvalidOperationException("Invalid active ability target : the targeted cell contains no character");
+            }
+            foreach (Cell targetDestCell in GetTargetMovementDestinations(targetCell))
+            {
+                CharacterActionTarget actionTarget = new CharacterActionTarget(targetCell.Character, targetCell.Pos, targetDestCell.Pos);
+                CharacterAction action = new CharacterAction(Character, [actionTarget], true);
+                activeAbilityActions.Add(action);
+            }
+        }
+
+        return activeAbilityActions;
     }
 
     /// <summary>
