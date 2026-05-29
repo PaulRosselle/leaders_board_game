@@ -99,6 +99,32 @@ public static class BoardQuery
     }
 
     /// <summary>
+    /// Find the first cell containing a character in a given direction and returns it if it matches the parameters
+    /// </summary>
+    public static Cell? FindFirstCellInDirectionMatchingCharacter(Board board, Position pos, Direction direction,
+                                                                  TeamColor? characterColor, CharacterType? characterType)
+    {
+        Cell? adjacentCell = FindAdjacentCell(board, pos, direction);
+        // If we cant pursue the search in the given direction, we return null
+        if (adjacentCell is null)
+        {
+            return null;
+        }
+        // If the tile is empty, we search in the next cell
+        if (adjacentCell.Character is null)
+        {
+            return FindFirstCellInDirectionMatchingCharacter(board, adjacentCell.Pos, direction, characterColor, characterType);
+        }
+        // If the character matches the search options, we return its cell
+        if ((characterColor is null || characterColor == adjacentCell.Character.Color) &&
+            (characterType is null || characterType == adjacentCell.Character.CharacterType))
+        {
+            return adjacentCell;
+        }
+        return null;
+    }
+
+    /// <summary>
     /// Returns the first cell with a leader of the expected color. If there is none, returns null instead
     /// </summary>
     public static Cell? FindLeaderCell(Board board, TeamColor leaderColor)
