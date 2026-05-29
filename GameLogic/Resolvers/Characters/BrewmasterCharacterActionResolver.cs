@@ -4,7 +4,6 @@ using System;
 using System.Collections.Generic;
 using LeadersBoardGame.GameLogic.Entities;
 using LeadersBoardGame.GameLogic.Enums;
-using LeadersBoardGame.GameLogic.Queries;
 
 public class BrewmasterCharacterActionResolver : CharacterActionResolver
 {
@@ -18,8 +17,7 @@ public class BrewmasterCharacterActionResolver : CharacterActionResolver
         // The brewmaster's active ability only targets adjacent allies
         foreach (Direction direction in Enum.GetValues<Direction>())
         {
-            Cell? adjacentCell = BoardQuery.FindAdjacentCell(Game.Board, CharacterCell, direction);
-            if (adjacentCell is not null && adjacentCell.Character is not null && 
+            if (CharacterCell.AdjacentCells.TryGetValue(direction, out Cell? adjacentCell) && adjacentCell.Character is not null && 
                 adjacentCell.Character.Color == Character.Color)
             {
                 targetCells.Add(adjacentCell);

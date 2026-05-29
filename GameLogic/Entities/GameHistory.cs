@@ -1,6 +1,5 @@
 namespace LeadersBoardGame.GameLogic.Entities;
 
-using System;
 using System.Collections.Generic;
 using LeadersBoardGame.GameLogic.HistoryEntries;
 

@@ -57,7 +57,14 @@ public static class GameQuery
             Cell? nextCell = leaderCell;
             do
             {
-                nextCell = BoardQuery.FindAdjacentCell(game.Board, nextCell, direction);
+                if (nextCell.AdjacentCells.TryGetValue(direction, out Cell? adjacentCell))
+                {
+                    nextCell = adjacentCell;
+                }
+                else
+                {
+                    nextCell = null;
+                }
                 totalCaptureValue += GetCaptureValue(nextCell, distance, leaderColor);
                 // If the required capture value is reached, it means that the leader is captured
                 if (totalCaptureValue >= s_leader_required_capture_value)
@@ -80,10 +87,9 @@ public static class GameQuery
         Cell leaderCell = BoardQuery.GetLeaderCell(game.Board, leaderColor);
         foreach (Direction direction in Enum.GetValues<Direction>())
         {
-            Cell? adjacentCell = BoardQuery.FindAdjacentCell(game.Board, leaderCell, direction);
             // If at least one cell around the leader is empty, we can exit 
             // immediately since we can be sure that it is not surrounded
-            if (adjacentCell is not null && adjacentCell.Character is null)
+            if (leaderCell.AdjacentCells.TryGetValue(direction, out Cell? adjacentCell) && adjacentCell.Character is null)
             {
                 return false;
             }
@@ -124,8 +130,7 @@ public static class GameQuery
         // Then, we go through its adjacent cells to look for other cells to connect
         foreach (Direction direction in Enum.GetValues<Direction>())
         {
-            Cell? adjacentCell = BoardQuery.FindAdjacentCell(board, cell, direction);
-            if (adjacentCell is not null && nonConnectecCells.Contains(adjacentCell))
+            if (cell.AdjacentCells.TryGetValue(direction, out Cell? adjacentCell) && nonConnectecCells.Contains(adjacentCell))
             {
                 GatherConnectedCells(board, adjacentCell, nonConnectecCells, connectedCells);
             }

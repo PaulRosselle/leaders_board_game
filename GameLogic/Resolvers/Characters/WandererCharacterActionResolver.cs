@@ -40,8 +40,7 @@ public class WandererCharacterActionResolver : CharacterActionResolver
         {
             foreach (Direction direction in Enum.GetValues<Direction>())
             {
-                Cell? adjacentCell = BoardQuery.FindAdjacentCell(Game.Board, CharacterCell.Pos, direction);
-                if (adjacentCell is not null)
+                if (CharacterCell.AdjacentCells.TryGetValue(direction, out Cell? adjacentCell))
                 {
                     targetMovementDestCells.Remove(adjacentCell);
                 }

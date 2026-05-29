@@ -1,9 +1,7 @@
 namespace LeadersBoardGame.GameLogic.Entities;
 
-using System;
 using LeadersBoardGame.GameLogic.Actions;
 using LeadersBoardGame.GameLogic.Enums;
-
 
 public class GameConfig
 {
