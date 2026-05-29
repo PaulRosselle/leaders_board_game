@@ -1,6 +1,10 @@
 namespace LeadersBoardGame.GameLogic.Resolvers.Characters;
 
-public static class DefaultCharacterActionResolver
+using LeadersBoardGame.GameLogic.Entities;
+
+public class DefaultCharacterActionResolver : CharacterActionResolver
 {
-    
+    public DefaultCharacterActionResolver(Game game, GameHistory history, Character character) : base(game, history, character)
+    {
+    }
 }
