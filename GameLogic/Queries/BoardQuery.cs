@@ -20,45 +20,11 @@ public static class BoardQuery
     /// </summary>
     public static Cell? FindAdjacentCell(Board board, int originX, int originY, Direction direction)
     {
-        // Since in most cases only one of the coordinate value changes, we initialize them with the origin value
-        int nextXPos = originX;
-        int nextYPos = originY;
-        if (direction.IsSameColumn()) {
-            // If we're looking for a tile on the same column, we apply to y the next value in the given direction
-            if (direction.IsTop()) {
-                nextYPos--;
-            } else {
-                nextYPos++;
-            }
-        } else {
-            // Knowing the tiles aren't on the same column at this point, we apply to x the next value in the given direction
-            if (direction.IsLeft()) {
-                nextXPos--;
-            } else {
-                nextXPos++;
-            }
-            // Given that C# integer division truncates the value, "Math.Floor" is unnecessary to get the center tile idx
-            int centerColumnIdx = board.Cells.Length / 2;
-            // Tiles have up to 6 adjacent tiles, meaning that we can see them as hexagons.
-            // Foremost, each column is offset from its neighbors since the board itself is hexagonally shaped.
-            // For this reason, we must offset the y value for TopLeft/TopRight directions to take this into account
-            bool directionIsTowardExterior = (originX == centerColumnIdx) ||
-                    (direction.IsLeft() && originX < centerColumnIdx) ||
-                    (!direction.IsLeft() && originX > centerColumnIdx);
-            int yOffset = directionIsTowardExterior ? -1 : 0;
-            // The BottomLeft/BottomRight tiles are always placed immediately below the TopLeft/TopRight adjacentTiles,
-            // meaning we can just add 1 to the offset to get their index on the board
-            if (!direction.IsTop()) {
-                yOffset++;
-            }
-            nextYPos += yOffset;
+        if (board.Cells[originX][originY].AdjacentCells.TryGetValue(direction, out Cell? adjacentCell))
+        {
+            return adjacentCell;
         }
-        // If the adjacent tile index is out of bounds, we return null
-        if (nextXPos < 0 || nextXPos > board.Cells.GetUpperBound(0) ||
-                nextYPos < 0 || nextYPos > board.Cells.GetUpperBound(1)) {
-            return null;
-        }
-        return board.Cells[nextXPos][nextYPos];
+        return null;
     }
 
     /// <summary>
