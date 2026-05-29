@@ -72,6 +72,10 @@ classDiagram
         +Create() Character
         +Transform(Character, CharacterType, TeamColor) Character
     }
+    class GameActionHandlerFactory {
+        <<static>>
+        +Create(gameAction : IGameAction) IActionHandler
+    }
     class CharacterActionResolverFactory {
         <<static>>
         +Create(type : CharacterType) CharacterActionResolver
@@ -103,11 +107,13 @@ classDiagram
     %% GameFactory
     GameFactory ..> BoardFactory
     GameFactory ..> CharacterFactory
+    GameFactory ..> GameActionHandlerFactory
     GameFactory ..> Game
 
     %% GameHandler
     GameHandler --> Game
     GameHandler --> GameHistory
+    GameHandler --> GameActionHandlerFactory
     GameHandler --> CharacterActionResolverFactory
     GameHandler ..> CharacterActionResolver
     GameHandler ..> RecruitmentActionResolver
