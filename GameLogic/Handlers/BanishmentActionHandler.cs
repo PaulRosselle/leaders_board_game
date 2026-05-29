@@ -9,7 +9,6 @@ public class BanishmentActionHandler : IActionHandler
 
     public BanishmentAction Action { get; }
 
-
     public BanishmentActionHandler(Game game, BanishmentAction action)
     {
         Game = game;
