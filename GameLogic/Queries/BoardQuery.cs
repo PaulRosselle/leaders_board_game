@@ -16,34 +16,6 @@ public static class BoardQuery
     }
 
     /// <summary>
-    /// Returns the adjacent cell in a given direction. If there is none, returns null instead
-    /// </summary>
-    public static Cell? FindAdjacentCell(Board board, int originX, int originY, Direction direction)
-    {
-        if (board.Cells[originX][originY].AdjacentCells.TryGetValue(direction, out Cell? adjacentCell))
-        {
-            return adjacentCell;
-        }
-        return null;
-    }
-
-    /// <summary>
-    /// Returns the adjacent cell in a given direction. If there is none, returns null instead
-    /// </summary>
-    public static Cell? FindAdjacentCell(Board board, Position pos, Direction direction)
-    {
-        return FindAdjacentCell(board, pos.X, pos.Y, direction);
-    }
-
-    /// <summary>
-    /// Returns the adjacent cell in a given direction. If there is none, returns null instead
-    /// </summary>
-    public static Cell? FindAdjacentCell(Board board, Cell cell, Direction direction)
-    {
-        return FindAdjacentCell(board, cell.Pos.X, cell.Pos.Y, direction);
-    }
-
-    /// <summary>
     /// Return cells with a non-null character matching the given parameters
     /// </summary>
     public static List<Cell> FindCellsWithMatchingCharacter(Board board, TeamColor? characterColor, CharacterType? characterType)
@@ -70,9 +42,8 @@ public static class BoardQuery
     public static Cell? FindFirstCellInDirectionMatchingCharacter(Board board, Position pos, Direction direction,
                                                                   TeamColor? characterColor, CharacterType? characterType)
     {
-        Cell? adjacentCell = FindAdjacentCell(board, pos, direction);
         // If we cant pursue the search in the given direction, we return null
-        if (adjacentCell is null)
+        if (!GetCell(board, pos).AdjacentCells.TryGetValue(direction, out Cell? adjacentCell))
         {
             return null;
         }

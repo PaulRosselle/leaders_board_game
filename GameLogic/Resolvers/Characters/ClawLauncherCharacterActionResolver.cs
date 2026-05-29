@@ -36,10 +36,10 @@ public class ClawLauncherCharacterActionResolver : CharacterActionResolver
         {
             foreach (Direction direction in Enum.GetValues<Direction>())
             {
-                if (GetTargetInDirection(direction) == targetCell)
+                if (GetTargetInDirection(direction) == targetCell && CharacterCell.AdjacentCells.TryGetValue(direction, out Cell? adjacentDestCell))
                 {
                     // We add the adjacent cell in the direction of the target (from the claw launcher's pov)
-                    targetMovementDestCells.Add(BoardQuery.FindAdjacentCell(Game.Board, CharacterCell.Pos, direction)!);
+                    targetMovementDestCells.Add(adjacentDestCell);
                     break;
                 }
             }
@@ -50,10 +50,10 @@ public class ClawLauncherCharacterActionResolver : CharacterActionResolver
             foreach (Direction direction in Enum.GetValues<Direction>())
             {
                 Cell? destTargetCell = GetTargetInDirection(direction);
-                if (destTargetCell is not null)
+                if (destTargetCell is not null && destTargetCell.AdjacentCells.TryGetValue(direction, out Cell? clawLauncherDestCell))
                 {
                     // We add the adjacent cell in the direction of the claw launcher (from the target's pov)
-                    targetMovementDestCells.Add(BoardQuery.FindAdjacentCell(Game.Board, destTargetCell.Pos, direction.GetOpposite())!);
+                    targetMovementDestCells.Add(clawLauncherDestCell);
                 }
             }
         }
@@ -64,8 +64,11 @@ public class ClawLauncherCharacterActionResolver : CharacterActionResolver
     private Cell? GetTargetInDirection(Direction direction)
     {
         // The claw launcher can target non-adjacent characters visibles in a straight line
-        Cell? adjacentCell = BoardQuery.FindAdjacentCell(Game.Board, CharacterCell.Pos, direction);
-        Cell? targetCell = BoardQuery.FindFirstCellInDirectionMatchingCharacter(Game.Board, CharacterCell.Pos, direction, null, null);
-        return adjacentCell != targetCell ? targetCell : null;
+        if (CharacterCell.AdjacentCells.TryGetValue(direction, out Cell? adjacentCell))
+        {
+            Cell? targetCell = BoardQuery.FindFirstCellInDirectionMatchingCharacter(Game.Board, CharacterCell.Pos, direction, null, null);
+            return adjacentCell != targetCell ? targetCell : null;
+        }
+        return null;
     }
 }

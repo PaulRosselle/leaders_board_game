@@ -52,8 +52,11 @@ public class IllusionistCharacterActionResolver : CharacterActionResolver
     private Cell? GetTargetInDirection(Direction direction)
     {
         // The illusionist can target non-adjacent characters visibles in a straight line
-        Cell? adjacentCell = BoardQuery.FindAdjacentCell(Game.Board, CharacterCell.Pos, direction);
-        Cell? targetCell = BoardQuery.FindFirstCellInDirectionMatchingCharacter(Game.Board, CharacterCell.Pos, direction, null, null);
-        return adjacentCell != targetCell ? targetCell : null;
+        if (CharacterCell.AdjacentCells.TryGetValue(direction, out Cell? adjacentCell))
+        {
+            Cell? targetCell = BoardQuery.FindFirstCellInDirectionMatchingCharacter(Game.Board, CharacterCell.Pos, direction, null, null);
+            return adjacentCell != targetCell ? targetCell : null;
+        }
+        return null;
     }
 }

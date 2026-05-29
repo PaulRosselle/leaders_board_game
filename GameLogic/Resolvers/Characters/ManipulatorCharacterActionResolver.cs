@@ -35,8 +35,11 @@ public class ManipulatorCharacterActionResolver : CharacterActionResolver
     private Cell? GetTargetInDirection(Direction direction)
     {
         // The manipulator can target non-adjacent opponents visibles in a straight line
-        Cell? adjacentCell = BoardQuery.FindAdjacentCell(Game.Board, CharacterCell.Pos, direction);
-        Cell? targetCell = BoardQuery.FindFirstCellInDirectionMatchingCharacter(Game.Board, CharacterCell.Pos, direction, Character.Color, null);
-        return adjacentCell != targetCell ? targetCell : null;
+        if (CharacterCell.AdjacentCells.TryGetValue(direction, out Cell? adjacentCell))
+        {
+            Cell? targetCell = BoardQuery.FindFirstCellInDirectionMatchingCharacter(Game.Board, CharacterCell.Pos, direction, Character.Color, null);
+            return adjacentCell != targetCell ? targetCell : null;
+        }
+        return null;
     }
 }

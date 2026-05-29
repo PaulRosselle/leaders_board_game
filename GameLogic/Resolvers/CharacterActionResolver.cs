@@ -72,10 +72,10 @@ public abstract class CharacterActionResolver
     {
         foreach (Direction direction in Enum.GetValues<Direction>())
         {
-            Cell? adjacentCell = BoardQuery.FindAdjacentCell(Game.Board, currentCellPos, direction);
             // If we encounter an adjacent empty cell, we try to add it to the the list.
             // We only add it if it is a new one and we only recurse if that's the case
-            if (adjacentCell is not null && adjacentCell.Character is null && adjacentEmptyCells.Add(adjacentCell) && currentDistance < maxDistance)
+            if (BoardQuery.GetCell(Game.Board,currentCellPos).AdjacentCells.TryGetValue(direction, out Cell? adjacentCell) && 
+                adjacentCell.Character is null && adjacentEmptyCells.Add(adjacentCell) && currentDistance < maxDistance)
             {   
                 GatherAdjacentEmptyCells(adjacentCell.Pos, adjacentEmptyCells, maxDistance, currentDistance + 1);
             }

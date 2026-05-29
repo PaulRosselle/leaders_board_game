@@ -24,11 +24,9 @@ public class RiderCharacterActionResolver : CharacterActionResolver
         // The rider's active ability allows him to run by 2 cells in a straight line
         foreach (Direction direction in Enum.GetValues<Direction>())
         {
-            Cell? adjacentCell = BoardQuery.FindAdjacentCell(Game.Board, CharacterCell.Pos, direction);
-            if (adjacentCell is not null && adjacentCell.Character is null)
+            if (CharacterCell.AdjacentCells.TryGetValue(direction, out Cell? adjacentCell) && adjacentCell.Character is null)
             {
-                Cell? targetDestCell = BoardQuery.FindAdjacentCell(Game.Board, adjacentCell.Pos, direction);
-                if (targetDestCell is not null && targetDestCell.Character is null)
+                if (adjacentCell.AdjacentCells.TryGetValue(direction, out Cell? targetDestCell) && targetDestCell.Character is null)
                 {
                     targetMovementDestCells.Add(targetDestCell);
                 }
