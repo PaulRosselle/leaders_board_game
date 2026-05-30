@@ -34,7 +34,7 @@ public static class BoardFactory
             for (int y = 0; y < rowsCount; y++)
             {
                 Cell currentCell = cells[x][y];
-                foreach (Direction direction in Enum.GetValues<Direction>())
+                foreach (Direction direction in DirectionExtension.AllDirections)
                 {
                     Cell? adjacentCell = FindAdjacentCell(cells, x, y, direction);
                     if (adjacentCell is not null)

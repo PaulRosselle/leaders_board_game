@@ -13,8 +13,10 @@ public enum Direction
     TopLeft
 }
 
-public static class DirectionMethods
+public static class DirectionExtension
 {
+    public static readonly Direction[] AllDirections = Enum.GetValues<Direction>();
+
     public static Direction GetOpposite(this Direction direction) => direction switch
     {
         Direction.Top => Direction.Bottom,

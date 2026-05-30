@@ -16,7 +16,7 @@ public class BruiserCharacterActionResolver : CharacterActionResolver
     {
         List<Cell> targetCells = [];
         // The bruiser's active ability only targets adjacent opponents
-        foreach (Direction direction in Enum.GetValues<Direction>())
+        foreach (Direction direction in DirectionExtension.AllDirections)
         {
             if (CharacterCell.AdjacentCells.TryGetValue(direction, out Cell? adjacentCell) && 
                 adjacentCell.Character is not null && 
@@ -36,7 +36,7 @@ public class BruiserCharacterActionResolver : CharacterActionResolver
     /// <exception cref="InvalidOperationException"></exception>
     private Direction GetTargetDirection(Cell targetCell)
     {
-        foreach (Direction direction in Enum.GetValues<Direction>())
+        foreach (Direction direction in DirectionExtension.AllDirections)
         {
             if (CharacterCell.AdjacentCells.TryGetValue(direction, out Cell? adjacentCell) && 
                 adjacentCell == targetCell)

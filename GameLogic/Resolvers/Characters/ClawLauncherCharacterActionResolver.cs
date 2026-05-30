@@ -16,7 +16,7 @@ public class ClawLauncherCharacterActionResolver : CharacterActionResolver
     {
         // The claw launcher can target itself using his active ability
         List<Cell> targetCells = [CharacterCell];
-        foreach (Direction direction in Enum.GetValues<Direction>())
+        foreach (Direction direction in DirectionExtension.AllDirections)
         {
             Cell? targetCell = GetTargetInDirection(direction);
             if (targetCell is not null)
@@ -34,7 +34,7 @@ public class ClawLauncherCharacterActionResolver : CharacterActionResolver
         // 1. Dragging a target to him
         if (targetCell != CharacterCell)
         {
-            foreach (Direction direction in Enum.GetValues<Direction>())
+            foreach (Direction direction in DirectionExtension.AllDirections)
             {
                 if (GetTargetInDirection(direction) == targetCell && 
                     CharacterCell.AdjacentCells.TryGetValue(direction, out Cell? adjacentDestCell))
@@ -48,7 +48,7 @@ public class ClawLauncherCharacterActionResolver : CharacterActionResolver
         // 2. Dragging himself to a character visible in a straight line
         else
         {
-            foreach (Direction direction in Enum.GetValues<Direction>())
+            foreach (Direction direction in DirectionExtension.AllDirections)
             {
                 Cell? destTargetCell = GetTargetInDirection(direction);
                 if (destTargetCell is not null && 

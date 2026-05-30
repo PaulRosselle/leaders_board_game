@@ -13,19 +13,19 @@ public class Turn : IHistoryEntry, ISegment
 
     public TransitionTarget Transition => TransitionTarget.Turn;
 
-    public TurnStartPhase TurnStart { get; }
+    public TurnStartPhase TurnStartPhase { get; }
 
-    public ActionsPhase Actions { get; }
+    public ActionsPhase ActionsPhase { get; }
 
-    public RecruitmentPhase Recruitment { get; }
+    public RecruitmentPhase RecruitmentPhase { get; }
 
-    public TurnEndPhase TurnEnd { get; }
+    public TurnEndPhase TurnEndPhase { get; }
 
     public Turn()
     {
-        TurnStart = new TurnStartPhase();
-        Actions = new ActionsPhase();
-        Recruitment = new RecruitmentPhase();
-        TurnEnd = new TurnEndPhase();
+        TurnStartPhase = new TurnStartPhase();
+        ActionsPhase = new ActionsPhase();
+        RecruitmentPhase = new RecruitmentPhase();
+        TurnEndPhase = new TurnEndPhase();
     }
 }

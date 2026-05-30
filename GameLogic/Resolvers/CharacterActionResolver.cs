@@ -70,7 +70,7 @@ public abstract class CharacterActionResolver
     /// </summary>
     private void GatherAdjacentEmptyCells(Position currentCellPos, HashSet<Cell> adjacentEmptyCells, int maxDistance, int currentDistance)
     {
-        foreach (Direction direction in Enum.GetValues<Direction>())
+        foreach (Direction direction in DirectionExtension.AllDirections)
         {
             // If we encounter an adjacent empty cell, we try to add it to the the list.
             // We only add it if it is a new one and we only recurse if that's the case

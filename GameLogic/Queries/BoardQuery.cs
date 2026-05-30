@@ -37,6 +37,14 @@ public static class BoardQuery
     }
 
     /// <summary>
+    /// Return cells with a non-null character
+    /// </summary>
+    public static List<Cell> FindCellsWithCharacter(Board board)
+    {
+        return FindCellsWithMatchingCharacter(board, null, null);;
+    }
+
+    /// <summary>
     /// Find the first cell containing a character in a given direction and returns it if it matches the parameters
     /// </summary>
     public static Cell? FindFirstCellInDirectionMatchingCharacter(Board board, Position pos, Direction direction,

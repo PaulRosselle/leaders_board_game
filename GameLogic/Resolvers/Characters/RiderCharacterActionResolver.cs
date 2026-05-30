@@ -21,7 +21,7 @@ public class RiderCharacterActionResolver : CharacterActionResolver
     {
         List<Cell> targetMovementDestCells = [];
         // The rider's active ability allows him to run by 2 cells in a straight line
-        foreach (Direction direction in Enum.GetValues<Direction>())
+        foreach (Direction direction in DirectionExtension.AllDirections)
         {
             if (CharacterCell.AdjacentCells.TryGetValue(direction, out Cell? adjacentCell) && adjacentCell.Character is null &&
                 adjacentCell.AdjacentCells.TryGetValue(direction, out Cell? targetDestCell) && targetDestCell.Character is null)

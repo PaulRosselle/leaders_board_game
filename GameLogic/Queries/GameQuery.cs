@@ -50,7 +50,7 @@ public static class GameQuery
         int totalCaptureValue = 0;
         // We check every direction around the leader in a straight line to verify if there
         // are  any character susceptible to increase the capture value
-        foreach (Direction direction in Enum.GetValues<Direction>())
+        foreach (Direction direction in DirectionExtension.AllDirections)
         {
             // Since we always deal with the next cell in a direction, the capture distance is initialized to 1.
             byte distance = 1;
@@ -85,7 +85,7 @@ public static class GameQuery
     public static bool IsLeaderSurrounded(Game game, TeamColor leaderColor)
     {
         Cell leaderCell = BoardQuery.GetLeaderCell(game.Board, leaderColor);
-        foreach (Direction direction in Enum.GetValues<Direction>())
+        foreach (Direction direction in DirectionExtension.AllDirections)
         {
             // If at least one cell around the leader is empty, we can exit 
             // immediately since we can be sure that it is not surrounded
@@ -128,7 +128,7 @@ public static class GameQuery
         connectedCells.Add(cell);
         nonConnectecCells.Remove(cell);
         // Then, we go through its adjacent cells to look for other cells to connect
-        foreach (Direction direction in Enum.GetValues<Direction>())
+        foreach (Direction direction in DirectionExtension.AllDirections)
         {
             if (cell.AdjacentCells.TryGetValue(direction, out Cell? adjacentCell) && nonConnectecCells.Contains(adjacentCell))
             {

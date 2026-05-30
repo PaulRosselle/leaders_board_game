@@ -21,13 +21,13 @@ public class AcrobatCharacterActionResolver : CharacterActionResolver
     {
         HashSet<Cell> targetMovementDestCells = [];
         // The acrobat can jump above any adacent character twice per active ability use
-        foreach (Direction firstJumpDirection in Enum.GetValues<Direction>())
+        foreach (Direction firstJumpDirection in DirectionExtension.AllDirections)
         {
             Cell? firstJumpDest = FindJumpDestination(CharacterCell, firstJumpDirection);
             if (firstJumpDest is not null)
             {
                 targetMovementDestCells.Add(firstJumpDest);
-                foreach (Direction secondJumpDirection in Enum.GetValues<Direction>())
+                foreach (Direction secondJumpDirection in DirectionExtension.AllDirections)
                 {
                     // The second jump cannot be in the opposite direction of the
                     // first since it would be the same as not moving
