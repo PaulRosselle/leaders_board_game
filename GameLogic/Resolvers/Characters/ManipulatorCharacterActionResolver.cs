@@ -15,7 +15,7 @@ public class ManipulatorCharacterActionResolver : CharacterActionResolver
     protected override List<Cell> GetActiveAbilityTargets()
     {
         List<Cell> targetCells = [];
-        foreach (Direction direction in Enum.GetValues<Direction>())
+        foreach (Direction direction in DirectionExtension.AllDirections)
         {
             Cell? targetCell = GetTargetInDirection(direction);
             if (targetCell is not null)

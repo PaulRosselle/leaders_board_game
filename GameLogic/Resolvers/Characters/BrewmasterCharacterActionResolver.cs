@@ -15,7 +15,7 @@ public class BrewmasterCharacterActionResolver : CharacterActionResolver
     {
         List<Cell> targetCells = [];
         // The brewmaster's active ability only targets adjacent allies
-        foreach (Direction direction in Enum.GetValues<Direction>())
+        foreach (Direction direction in DirectionExtension.AllDirections)
         {
             if (CharacterCell.AdjacentCells.TryGetValue(direction, out Cell? adjacentCell) && adjacentCell.Character is not null && 
                 adjacentCell.Character.Color == Character.Color)

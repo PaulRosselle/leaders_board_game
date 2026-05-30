@@ -6,7 +6,7 @@ public enum TeamColor
     White
 }
 
-public static class TeamColorMethods
+public static class TeamColorExtension
 {
     public static TeamColor GetOpposite(this TeamColor teamColor)
     {

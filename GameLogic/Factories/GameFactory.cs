@@ -28,10 +28,10 @@ public static class GameFactory
             if (historyEntry is Turn turn)
             {
                 // Actions in a turn are always played in this order : Start, ActionsPhase, RecruitmentPhase, End
-                DoActions(game, turn.TurnStart.Actions);
-                DoActions(game, turn.Actions.Actions);
-                DoActions(game, turn.Recruitment.Actions);
-                DoActions(game, turn.TurnEnd.Actions);
+                DoActions(game, turn.TurnStartPhase.Actions);
+                DoActions(game, turn.ActionsPhase.Actions);
+                DoActions(game, turn.RecruitmentPhase.Actions);
+                DoActions(game, turn.TurnEndPhase.Actions);
             }
             else if (historyEntry is BanishmentPhase banishmentPhase)
             {

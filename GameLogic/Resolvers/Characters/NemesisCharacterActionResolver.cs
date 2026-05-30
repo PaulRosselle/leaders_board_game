@@ -24,11 +24,11 @@ public class NemesisCharacterActionResolver : CharacterActionResolver
         HashSet<Cell> secondStepCells = [];
 
         // We get every cell at 1 and 2 distance from the Nemesis
-        foreach (Direction firstStepDirection in Enum.GetValues<Direction>())
+        foreach (Direction firstStepDirection in DirectionExtension.AllDirections)
         {
             if (CharacterCell.AdjacentCells.TryGetValue(firstStepDirection, out Cell? firstStepCell) && firstStepCell.Character is null)
             {
-                foreach (Direction secondStepDirection in Enum.GetValues<Direction>())
+                foreach (Direction secondStepDirection in DirectionExtension.AllDirections)
                 {
                     if (firstStepCell.AdjacentCells.TryGetValue(secondStepDirection, out Cell? secondStepCell) && secondStepCell.Character is null)
                     {

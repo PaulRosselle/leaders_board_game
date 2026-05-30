@@ -38,7 +38,7 @@ public class WandererCharacterActionResolver : CharacterActionResolver
         TeamColor opponentColor = Character.Color.GetOpposite();
         foreach (Cell opponentCell in BoardQuery.FindCellsWithMatchingCharacter(Game.Board, opponentColor, null))
         {
-            foreach (Direction direction in Enum.GetValues<Direction>())
+            foreach (Direction direction in DirectionExtension.AllDirections)
             {
                 if (CharacterCell.AdjacentCells.TryGetValue(direction, out Cell? adjacentCell))
                 {
