@@ -88,11 +88,16 @@ classDiagram
         +GetGameMode() GameMode
         +GetPlayers Player[]
         +GetCurrentPlayer() Player
+        +GetCurrentPhase() GamePhase
         +GetPlayableCharacters() List~Cell~
+        +GetRecruitableCards() List~CharacterCard~
+        +GetBanishableCards() List~CharacterCard~
         +GetMovementActions(Character) List~CharacterAction~
         +GetActiveAbilityActions(Character) List~CharacterAction~
-        +GetRecruitmentActions(Character) List~RecruitmentAction~
-        +GetBanishmentAction(Character) BanishmentAction
+        +GetRecruitmentActions(CharacterCard) List~RecruitmentAction~
+        +GetBanishmentAction(CharacterCard) BanishmentAction
+        +CanSkipCurrentPhase() Boolean
+        +CanUndoLastAction() Boolean
         +DoAction(IGameAction)
         +UndoLastAction()
         +GetWinner() Player

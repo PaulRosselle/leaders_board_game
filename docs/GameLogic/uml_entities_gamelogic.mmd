@@ -16,6 +16,10 @@ classDiagram
         <<enumeration>>
     }
 
+    class GamePhaseType {
+        <<enumeration>>
+    }
+
     %% Interfaces
     class IHistoryEntry {
         <<interface>>
@@ -60,6 +64,11 @@ classDiagram
     class GameHistory {
         +Config : GameConfig
         +Entries : List~IHistoryEntry~
+    }
+
+    class GamePhase {
+        +Team : TeamColor
+        +PhaseType : GamePhaseType
     }
 
     %% Entités
@@ -115,5 +124,7 @@ classDiagram
     %% Relations vers enums
     Character --> CharacterType
     Character --> TeamColor
+    GamePhase --> GamePhaseType
+    GamePhase --> TeamColor
     Player --> TeamColor
     GameConfig --> GameMode
