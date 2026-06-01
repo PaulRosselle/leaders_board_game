@@ -24,7 +24,7 @@ public enum CharacterCard
     Wanderer
 }
 
-public static class CharacterCardMethods
+public static class CharacterCardExtension
 {
     public static AbilityType[] GetAbilityTypes(this CharacterCard characterCard) => characterCard switch
     {

@@ -5,11 +5,11 @@ using LeadersBoardGame.GameLogic.Enums;
 public class GamePhase
 {
     public GamePhaseType PhaseType { get; }
-    public TeamColor Team { get; }
+    public Player PhasePlayer { get; }
 
-    public GamePhase(GamePhaseType phaseType, TeamColor team)
+    public GamePhase(GamePhaseType phaseType, Player phasePlayer)
     {
-        Team = team;
+        PhasePlayer = phasePlayer;
         PhaseType = phaseType;
     }
 }

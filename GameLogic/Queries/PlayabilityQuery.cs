@@ -6,39 +6,41 @@ using System.Linq;
 using LeadersBoardGame.GameLogic.Actions;
 using LeadersBoardGame.GameLogic.Entities;
 using LeadersBoardGame.GameLogic.Enums;
+using LeadersBoardGame.GameLogic.HistoryEntries;
 using LeadersBoardGame.GameLogic.HistoryEntries.Segments;
 
 
 public static class PlayabilityQuery
 {
     /// <summary>
-    /// Returns the current (= last) turn if it has an in progress actions phase
+    /// Returns true if the character is allowed to act during the current actions phase.
     /// </summary>
     /// <exception cref="InvalidOperationException">
-    /// Thrown when the last history entry was not a turn with an in progress actions phase
+    /// Thrown if no actions phase is in progress.
     /// </exception>
-    private static Turn GetCurrentTurnWithInProgressActionsPhase(GameHistory history, string errorMsg)
-    {
-        // To check if an action phase is in progress, we get the last turn and check if
-        // the actions phase has started but not ended yet
-        if (history.Entries.Count > 0 && history.Entries[^1] is Turn turn &&
-            turn.ActionsPhase.StartAction is not null && turn.ActionsPhase.EndAction is null)
-        {
-            return turn;
-        }
-        throw new InvalidOperationException(errorMsg);
-    }
-
     public static bool CanAct(Game game, GameHistory history, Character character)
     {
-        // We get the current turn, which throws an exception if no actions phase is in progress
-        return CanAct(game, history, character, GetCurrentTurnWithInProgressActionsPhase(history, "A character cannot act outside of the actions phase"));
+        // First, we get the current actions phase and turn team
+        IPhase? currentPhase = GameHistoryQuery.GetCurrentPhase(history);
+        TeamColor? currentEntryTeam = GameHistoryQuery.GetCurrentEntryTeam(history);
+        if (currentPhase is ActionsPhase actionsPhase && currentEntryTeam is TeamColor currentTurnTeam)
+        {
+            return CanAct(game, history, character, actionsPhase, currentTurnTeam);
+        }
+        // We throw an exception if no action phase in progress could be found
+        throw new InvalidOperationException("A character cannot act outside of the actions phase");
     }
 
-    private static bool CanAct(Game game, GameHistory history, Character character, Turn turn)
+    /// <summary>
+    /// Returns true if the character is forced to act during the current actions phase.
+    /// </summary>
+    /// <exception cref="InvalidOperationException">
+    /// Thrown if no actions phase is in progress.
+    /// </exception>
+    private static bool CanAct(Game game, GameHistory history, Character character, ActionsPhase actionsPhase, TeamColor turnTeam)
     {
         // Characters are only allowed to act during a turn matching their team colors
-        if (character.Color != turn.Team)
+        if (character.Team != turnTeam)
         {
             return false;
         }
@@ -50,7 +52,7 @@ public static class PlayabilityQuery
         }
 
         // Since only one action per turn is allowed, we look for an action performed by the character
-        foreach (IGameAction gameAction in turn.ActionsPhase.Actions)
+        foreach (IGameAction gameAction in actionsPhase.Actions)
         {
             if (gameAction is CharacterAction characterAction &&
 
@@ -63,10 +65,20 @@ public static class PlayabilityQuery
         return true;
     }
 
-    public static bool MustAct( Game game, GameHistory history, Character character)
+    /// <summary>
+    /// Returns true if the character is forced to act immediately.
+    /// </summary>
+    /// <exception cref="InvalidOperationException">
+    /// Thrown if no actions phase is in progress.
+    /// </exception>
+    public static bool MustAct(Game game, GameHistory history, Character character)
     {
-        // We call the current turn getter to throw an exception if no actions phase is in progress
-        GetCurrentTurnWithInProgressActionsPhase(history, "A character cannot be forced to act outside of the actions phase");
+        // We check if there is an actions phase in progress
+        IPhase? currentPhase = GameHistoryQuery.GetCurrentPhase(history);
+        if (currentPhase is not ActionsPhase)
+        {
+            throw new InvalidOperationException("A character cannot be forced to act outside of the actions phase");
+        }
 
         // There are currently no way for a character to be forced to play "during this turn"
         return false;
@@ -74,16 +86,20 @@ public static class PlayabilityQuery
 
     public static bool MustActNow(Game game, GameHistory history, Character character)
     {
-        // We get the current turn, which throws an exception if no actions phase is in progress
-        return MustActNow(game, history, character, GetCurrentTurnWithInProgressActionsPhase(history, "A character cannot be forced to act immediately outside of the actions phase"));
+        IPhase? currentPhase = GameHistoryQuery.GetCurrentPhase(history);
+        if (currentPhase is ActionsPhase actionsPhase)
+        {
+            return MustActNow(game, history, character, actionsPhase);
+        }
+        throw new InvalidOperationException("A character cannot be forced to act immediatelty outside of the actions phase");
     }
 
-    private static bool MustActNow(Game game, GameHistory history, Character character, Turn turn)
+    private static bool MustActNow(Game game, GameHistory history, Character character, ActionsPhase actionsPhase)
     {
         // The Nemesis can be forced to play immediately after an action moving a leader
         if (character.CharacterType == CharacterType.Nemesis &&
-            turn.ActionsPhase.Actions.Count > 0 && 
-            turn.ActionsPhase.Actions[^1] is CharacterAction characterAction)
+            actionsPhase.Actions.Count > 0 && 
+            actionsPhase.Actions[^1] is CharacterAction characterAction)
         {
             foreach (CharacterActionTarget actionTarget in characterAction.Targets)
             {
@@ -100,10 +116,20 @@ public static class PlayabilityQuery
         return false;
     }
 
+    /// <summary>
+    /// Returns true if the character is allowed to use their active ability.
+    /// </summary>
+    /// <exception cref="InvalidOperationException">
+    /// Thrown if no actions phase is in progress.
+    /// </exception>
     public static bool CanUseActiveAbility(Game game, GameHistory history, Character character)
     {
-        // We call the current turn getter to throw an exception if no actions phase is in progress
-        GetCurrentTurnWithInProgressActionsPhase(history, "A character cannot used its active ability outside of the actions phase");
+        // We check if there is an actions phase in progress
+        IPhase? currentPhase = GameHistoryQuery.GetCurrentPhase(history);
+        if (currentPhase is not ActionsPhase)
+        {
+            throw new InvalidOperationException("A character cannot used its active ability outside of the actions phase");
+        }
 
         // First, the character must have an active ability
         if (!character.CharacterType.GetCharacterCard().GetAbilityTypes().Contains(AbilityType.Active))
@@ -119,7 +145,7 @@ public static class PlayabilityQuery
             if (characterCell.AdjacentCells.TryGetValue(direction, out Cell? adjacentCell) &&
                 adjacentCell.Character is not null && 
                 adjacentCell.Character.CharacterType == CharacterType.Jailer &&
-                adjacentCell.Character.Color != character.Color)
+                adjacentCell.Character.Team != character.Team)
             {
                 return false;
             }
@@ -130,9 +156,15 @@ public static class PlayabilityQuery
 
     public static List<Cell> GetPlayableCharacters(Game game, GameHistory history)
     {
+        // First, we get the current actions phase and turn team
+        IPhase? currentPhase = GameHistoryQuery.GetCurrentPhase(history);
+        TeamColor? currentEntryTeam = GameHistoryQuery.GetCurrentEntryTeam(history);
+        if (currentPhase is not ActionsPhase actionsPhase || currentEntryTeam is not TeamColor currentTurnTeam)
+        {
+            throw new InvalidOperationException("A character cannot used its active ability outside of the actions phase");
+        }
+        
         List<Cell> playableCharacterCells = [];
-        // First we get the current turn, which throws an exception if no actions phase is in progress
-        Turn turn = GetCurrentTurnWithInProgressActionsPhase(history, "Characters cannot be playable outside of an actions phase");
         // Then we search for characters able to act during the turn
         List<Cell> characterCells = BoardQuery.FindCellsWithCharacter(game.Board);
         foreach (Cell characterCell in characterCells) {
@@ -142,7 +174,7 @@ public static class PlayabilityQuery
                 return [characterCell];
             }
             // If a character is allowed to act, we add them to the list
-            if (CanAct(game, history, characterCell.Character!, turn))
+            if (CanAct(game, history, characterCell.Character!, actionsPhase, currentTurnTeam))
             {
                 playableCharacterCells.Add(characterCell);
             }

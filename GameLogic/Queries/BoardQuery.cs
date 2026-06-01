@@ -2,6 +2,7 @@ namespace LeadersBoardGame.GameLogic.Queries;
 
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using LeadersBoardGame.GameLogic.Entities;
 using LeadersBoardGame.GameLogic.Enums;
 
@@ -26,7 +27,7 @@ public static class BoardQuery
             foreach (Cell cell in columnCells)
             {
                 if (cell.Character is not null && 
-                    (characterColor is null || cell.Character.Color == characterColor) && 
+                    (characterColor is null || cell.Character.Team == characterColor) && 
                     (characterType is null || cell.Character.CharacterType == characterType))
                 {
                     cellsWithMatchingPiece.Add(cell);
@@ -61,7 +62,7 @@ public static class BoardQuery
             return FindFirstCellInDirectionMatchingCharacter(board, adjacentCell.Pos, direction, characterColor, characterType);
         }
         // If the character matches the search options, we return its cell
-        if ((characterColor is null || characterColor == adjacentCell.Character.Color) &&
+        if ((characterColor is null || characterColor == adjacentCell.Character.Team) &&
             (characterType is null || characterType == adjacentCell.Character.CharacterType))
         {
             return adjacentCell;
@@ -79,7 +80,7 @@ public static class BoardQuery
             foreach (Cell cell in columnCells)
             {
                 if (cell.Character is not null && 
-                    cell.Character.Color == leaderColor &&
+                    cell.Character.Team == leaderColor &&
                     cell.Character.CharacterType.GetCharacterCard().IsLeader())
                 {
                     return cell;
@@ -125,5 +126,36 @@ public static class BoardQuery
             }
         }
         throw new InvalidOperationException($"No piece found on the board with id {characterId}");
+    }
+
+    /// <summary>
+    /// Returns the cells on which a recruitment could occur
+    /// </summary>
+    public static List<Cell> GetRecruitmentCells(Board board, TeamColor team)
+    {
+        // The board cells are stored within a two dimensional (x,y) array with 
+        // the teams recruitment cells on each limit of the Y axis.
+        List<Cell> recruitmentCells = [];
+        for (int x = 0; x < board.Cells.Length; x++)
+        {
+            Cell[] column = board.Cells[x];
+            Cell recruitmentCell = column[team == TeamColor.Black ? ^1 : 0];
+            // A recruitment cell must be empty
+            if (recruitmentCell.Character is null)
+            {
+                recruitmentCells.Add(recruitmentCell);
+            }
+        }
+        return recruitmentCells;
+    }
+
+    /// <summary>
+    /// Returns the cell on which a leader must be placed at the beginning of a game
+    /// </summary>
+    public static Cell GetLeaderStartingCell(Board board, TeamColor team)
+    {
+        // Leaders start in the central column of the board, each on a different end of the Y axis
+        Cell[] column = board.Cells[board.Cells.Length / 2];
+        return column[team == TeamColor.Black ? ^1 : 0];
     }
 }

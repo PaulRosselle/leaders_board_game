@@ -18,7 +18,7 @@ public static class GameQuery
     private static int GetCaptureValue(Cell? cell, byte distance, TeamColor leaderColor)
     {
         // A null or empty cell doesn't have a capture value and only opponent characters are taken into account
-        if (cell is null || cell.Character is null || cell.Character.Color == leaderColor)
+        if (cell is null || cell.Character is null || cell.Character.Team == leaderColor)
         {
             return 0;
         }
@@ -109,7 +109,7 @@ public static class GameQuery
             foreach (Cell cell in columnCells)
             {
                 // We add every cell with no piece or with an opponent's piece
-                if (cell.Character is null || cell.Character.Color != playerColor)
+                if (cell.Character is null || cell.Character.Team != playerColor)
                 {
                     nonBarrageCells.Add(cell);
                 }

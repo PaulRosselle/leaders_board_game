@@ -19,7 +19,7 @@ public class RoyalGuardCharacterActionResolver : CharacterActionResolver
     protected override List<Cell> GetTargetMovementDestinations(Cell targetCell)
     {
         // The royal guard's active ability allows him to move up to two tiles around its leader
-        Cell? leaderCell = BoardQuery.FindLeaderCell(Game.Board, Character.Color);
+        Cell? leaderCell = BoardQuery.FindLeaderCell(Game.Board, Character.Team);
         if (leaderCell is not null)
         {
             return GetAdjacentEmptyCells(leaderCell.Pos, 2);

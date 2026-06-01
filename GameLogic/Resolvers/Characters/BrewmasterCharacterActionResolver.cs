@@ -18,7 +18,7 @@ public class BrewmasterCharacterActionResolver : CharacterActionResolver
         foreach (Direction direction in DirectionExtension.AllDirections)
         {
             if (CharacterCell.AdjacentCells.TryGetValue(direction, out Cell? adjacentCell) && adjacentCell.Character is not null && 
-                adjacentCell.Character.Color == Character.Color)
+                adjacentCell.Character.Team == Character.Team)
             {
                 targetCells.Add(adjacentCell);
             }

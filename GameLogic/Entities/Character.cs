@@ -7,12 +7,12 @@ public class Character
 {
     public Guid Id { get; }
     public CharacterType CharacterType { get; }
-    public TeamColor Color { get; }
+    public TeamColor Team { get; }
 
-    public Character(Guid id, CharacterType type, TeamColor color)
+    public Character(Guid id, CharacterType type, TeamColor team)
     {
         Id = id;
-        Color = color;
+        Team = team;
         CharacterType = type;
     }
 }

@@ -13,7 +13,7 @@ public class LeaderCharacterActionResolver : CharacterActionResolver
     protected override int GetMovementMaxDistance()
     {
         // Passive ability : the vizier allows its leader to move to up to two cells per action
-        if (BoardQuery.FindCellsWithMatchingCharacter(Game.Board, Character.Color, CharacterType.Vizier).Count > 0)
+        if (BoardQuery.FindCellsWithMatchingCharacter(Game.Board, Character.Team, CharacterType.Vizier).Count > 0)
         {
             return 2;
         }

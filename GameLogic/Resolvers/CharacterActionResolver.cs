@@ -31,11 +31,11 @@ public abstract class CharacterActionResolver
     protected bool IsValidAction(CharacterAction action)
     {
         // To check if an action is valid we apply it to the game's projection
-        TeamColor teamColor = Character.Color;
+        TeamColor team = Character.Team;
         IActionHandler actionHandler = GameActionHandlerFactory.Create(Game, action);
         actionHandler.DoAction();
         // Then we verify each validation condition (a character action is invalid if it captures or surround its allied leader)
-        bool isValid = !GameQuery.IsLeaderCaptured(Game, History, teamColor) && !GameQuery.IsLeaderSurrounded(Game, teamColor);
+        bool isValid = !GameQuery.IsLeaderCaptured(Game, History, team) && !GameQuery.IsLeaderSurrounded(Game, team);
         // And finally we revert the action's effect on the game's projection
         actionHandler.UndoAction();
         return isValid;

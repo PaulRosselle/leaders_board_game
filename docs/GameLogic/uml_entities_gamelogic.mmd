@@ -67,7 +67,7 @@ classDiagram
     }
 
     class GamePhase {
-        +Team : TeamColor
+        +PhasePlayer : Player
         +PhaseType : GamePhaseType
     }
 
@@ -80,7 +80,7 @@ classDiagram
     class Character {
         +Id : Guid
         +Type : CharacterType
-        +Color : TeamColor
+        +Team : TeamColor
     }
 
     class Cell {
@@ -125,6 +125,6 @@ classDiagram
     Character --> CharacterType
     Character --> TeamColor
     GamePhase --> GamePhaseType
-    GamePhase --> TeamColor
+    GamePhase --> Player
     Player --> TeamColor
     GameConfig --> GameMode

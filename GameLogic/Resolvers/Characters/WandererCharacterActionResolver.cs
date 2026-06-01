@@ -35,7 +35,7 @@ public class WandererCharacterActionResolver : CharacterActionResolver
             }
         }
         // Then we remove every cell adjacent to an opponent
-        TeamColor opponentColor = Character.Color.GetOpposite();
+        TeamColor opponentColor = Character.Team.GetOpposite();
         foreach (Cell opponentCell in BoardQuery.FindCellsWithMatchingCharacter(Game.Board, opponentColor, null))
         {
             foreach (Direction direction in DirectionExtension.AllDirections)

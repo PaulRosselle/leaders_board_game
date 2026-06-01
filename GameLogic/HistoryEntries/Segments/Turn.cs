@@ -1,5 +1,6 @@
 namespace LeadersBoardGame.GameLogic.HistoryEntries.Segments;
 
+using System.Collections.Generic;
 using LeadersBoardGame.GameLogic.Actions;
 using LeadersBoardGame.GameLogic.Enums;
 
@@ -27,5 +28,13 @@ public class Turn : IHistoryEntry, ISegment
         ActionsPhase = new ActionsPhase();
         RecruitmentPhase = new RecruitmentPhase();
         TurnEndPhase = new TurnEndPhase();
+    }
+
+    /// <summary>
+    /// Returns the phases composing a turn in order
+    /// </summary>
+    public List<IPhase> GetPhasesInOrder()
+    {
+        return [TurnStartPhase, ActionsPhase, RecruitmentPhase, TurnEndPhase];
     }
 }

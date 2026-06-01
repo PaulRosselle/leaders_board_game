@@ -27,6 +27,8 @@ public enum CharacterType
 
 public static class CharacterTypeExtension
 {
+    public static readonly CharacterType[] AllCharacterTypes = Enum.GetValues<CharacterType>();
+
     public static CharacterCard GetCharacterCard(this CharacterType characterType) => characterType switch
     {
         CharacterType.Acrobat => CharacterCard.Acrobat,
