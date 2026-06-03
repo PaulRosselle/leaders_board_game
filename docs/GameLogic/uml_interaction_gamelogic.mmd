@@ -1,0 +1,58 @@
+classDiagram
+    direction TB
+
+    %% Enums
+    class InteractionType {
+        <<enumeration>>
+        CharacterCardExpected
+        PositionExpected
+    }
+
+    class TargetCategory {
+        <<enumeration>>
+        MovementDestination
+        ActiveAbilityDestination
+        ActiveAbilityTarget
+    }
+
+    class InteractionResultType {
+        <<enumeration>>
+        CardChosen
+        PositionChosen
+        NoChoice
+        CancelAction
+        UndoLastAction
+        EndPhase
+    }
+
+    %% Interaction
+    class InteractionRequest {
+        +Type : InteractionType
+        +LegalCards : List~CharacterCard~
+        +LegalPositions : Dictionary~TargetCategory, List~Position~~
+        +LegalResults : List~InteractionResultType~
+    }
+
+    class InteractionResult {
+        +ResultType : InteractionResultType
+        +ChosenCard : CharacterCard?
+        +ChosenPosition : Position?
+    }
+
+    %% Interface
+    class IGameFlowListener {
+        <<interface>>
+        +OnGameStarted(Game) Task
+        +OnGameEnded(TeamColor) Task
+        +OnPhaseChanged(GamePhase) Task
+        +OnAutomaticActionExecuted(IGameAction) Task
+        +OnInputRequired(InteractionRequest) Task~InteractionResult~
+    }
+
+    %% Relations
+    InteractionRequest --> InteractionType
+    InteractionRequest --> TargetCategory
+    InteractionRequest --> InteractionResultType
+    InteractionResult --> InteractionResultType
+    IGameFlowListener --> InteractionRequest
+    IGameFlowListener --> InteractionResult

@@ -24,12 +24,17 @@ classDiagram
     %% Resolvers
     class CharacterActionResolver {
         <<abstract>>
-        +GetMovementActions() List~CharacterAction~
-        +GetActiveAbilityActions() List~CharacterAction~
+        +GetNextInteraction(CharacterActionBuilder) InteractionRequest?
+        +BuildAction(CharacterActionBuilder) CharacterAction
     }
 
-    class RecruitmentActionResolver {
-        +GetRecruitmentActions(CharacterCard) List~RecruitmentAction~
+    %% Builder
+    class CharacterActionBuilder {
+        +SourceCharacter: Character
+        +IsActiveAbility: Boolean
+        +InteractionResults: List~InteractionResult~
+        +AddResult(InteractionResult)
+        +BuildAction() CharacterAction
     }
 
     %% Queries
@@ -85,22 +90,6 @@ classDiagram
     class GameHandler {
         +CurrentGame : Game
         +CurrentHistory : GameHistory
-        +GetGameMode() GameMode
-        +GetPlayers Player[]
-        +GetCurrentPlayer() Player
-        +GetCurrentPhase() GamePhase
-        +GetPlayableCharacters() List~Cell~
-        +GetRecruitableCards() List~CharacterCard~
-        +GetBanishableCards() List~CharacterCard~
-        +GetMovementActions(Character) List~CharacterAction~
-        +GetActiveAbilityActions(Character) List~CharacterAction~
-        +GetRecruitmentActions(CharacterCard) List~RecruitmentAction~
-        +GetBanishmentAction(CharacterCard) BanishmentAction
-        +CanSkipCurrentPhase() Boolean
-        +CanUndoLastAction() Boolean
-        +DoAction(IGameAction)
-        +UndoLastAction()
-        +GetWinner() Player
     }
 
     %% Héritage handlers
@@ -115,22 +104,16 @@ classDiagram
     GameFactory ..> GameActionHandlerFactory
     GameFactory ..> Game
 
-    %% GameHandler
-    GameHandler --> Game
-    GameHandler --> GameHistory
-    GameHandler --> GameActionHandlerFactory
-    GameHandler --> CharacterActionResolverFactory
-    GameHandler ..> CharacterActionResolver
-    GameHandler ..> RecruitmentActionResolver
-    GameHandler ..> IActionHandler
-    GameHandler --> GameQuery
-    GameHandler --> PlayabilityQuery
-
     %% Resolvers
+    CharacterActionResolver ..> CharacterActionBuilder : reads
     CharacterActionResolver ..> BoardQuery
     CharacterActionResolver ..> GameQuery
-    RecruitmentActionResolver ..> BoardQuery
     CharacterActionResolverFactory ..> CharacterActionResolver
+
+    %% Builder
+    GameHandler --> CharacterActionBuilder : creates / writes
+    GameHandler --> CharacterActionResolverFactory : calls
+    GameHandler --> IActionHandler : creates
 
     %% Queries
     GameQuery ..> Game
