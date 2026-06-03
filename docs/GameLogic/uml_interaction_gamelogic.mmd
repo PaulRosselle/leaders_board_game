@@ -27,6 +27,7 @@ classDiagram
 
     %% Interaction
     class InteractionRequest {
+        <<record>>
         +Type : InteractionType
         +LegalCards : List~CharacterCard~
         +LegalPositions : Dictionary~TargetCategory, List~Position~~
@@ -34,6 +35,7 @@ classDiagram
     }
 
     class InteractionResult {
+        <<record>>
         +ResultType : InteractionResultType
         +ChosenCard : CharacterCard?
         +ChosenPosition : Position?

@@ -31,10 +31,8 @@ classDiagram
     %% Builder
     class CharacterActionBuilder {
         +SourceCharacter: Character
-        +IsActiveAbility: Boolean
         +InteractionResults: List~InteractionResult~
         +AddResult(InteractionResult)
-        +BuildAction() CharacterAction
     }
 
     %% Queries
