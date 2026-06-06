@@ -22,7 +22,7 @@ public static class PlayabilityQuery
     {
         // First, we get the current actions phase and turn team
         IPhase? currentPhase = GameHistoryQuery.GetCurrentPhase(history);
-        TeamColor? currentEntryTeam = GameHistoryQuery.GetCurrentEntryTeam(history);
+        TeamColor? currentEntryTeam = GameHistoryQuery.GetLastEntryTeam(history);
         if (currentPhase is ActionsPhase actionsPhase && currentEntryTeam is TeamColor currentTurnTeam)
         {
             return CanAct(game, history, character, actionsPhase, currentTurnTeam);
@@ -154,29 +154,29 @@ public static class PlayabilityQuery
         return true;
     }
 
-    public static List<Cell> GetPlayableCharacters(Game game, GameHistory history)
+    public static List<Position> GetPlayableCharacters(Game game, GameHistory history)
     {
         // First, we get the current actions phase and turn team
         IPhase? currentPhase = GameHistoryQuery.GetCurrentPhase(history);
-        TeamColor? currentEntryTeam = GameHistoryQuery.GetCurrentEntryTeam(history);
+        TeamColor? currentEntryTeam = GameHistoryQuery.GetLastEntryTeam(history);
         if (currentPhase is not ActionsPhase actionsPhase || currentEntryTeam is not TeamColor currentTurnTeam)
         {
             throw new InvalidOperationException("A character cannot used its active ability outside of the actions phase");
         }
         
-        List<Cell> playableCharacterCells = [];
+        List<Position> playableCharacterCells = [];
         // Then we search for characters able to act during the turn
         List<Cell> characterCells = BoardQuery.FindCellsWithCharacter(game.Board);
         foreach (Cell characterCell in characterCells) {
             // If there is a character forced to play immediately, we return them alone
             if (MustActNow(game, history, characterCell.Character!))
             {
-                return [characterCell];
+                return [characterCell.Pos];
             }
             // If a character is allowed to act, we add them to the list
             if (CanAct(game, history, characterCell.Character!, actionsPhase, currentTurnTeam))
             {
-                playableCharacterCells.Add(characterCell);
+                playableCharacterCells.Add(characterCell.Pos);
             }
         }
         return playableCharacterCells;

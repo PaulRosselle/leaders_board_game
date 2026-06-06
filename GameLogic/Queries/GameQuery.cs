@@ -1,9 +1,10 @@
 namespace LeadersBoardGame.GameLogic.Queries;
 
-using System;
 using System.Collections.Generic;
 using LeadersBoardGame.GameLogic.Entities;
 using LeadersBoardGame.GameLogic.Enums;
+using LeadersBoardGame.GameLogic.HistoryEntries;
+using LeadersBoardGame.GameLogic.HistoryEntries.Segments;
 
 public static class GameQuery
 {
@@ -224,5 +225,27 @@ public static class GameQuery
 
         // We only get here when no isolated group has been found, which means "no barrage"
         return false;
+    }
+
+    public static TeamColor? GetWinnerTeam(GameHistory history, Game game, TeamColor currentPhaseTeam)
+    {
+        // First, we get the team for both players
+        TeamColor opponentTeam = currentPhaseTeam.GetOpposite();
+        TeamColor? winnerTeam = null;
+
+        // We check if the current leader is captured/surrounded first to stay consistent with 
+        // the "don't capture your own leader" rule
+        if (IsLeaderCaptured(game, history, currentPhaseTeam) ||
+            IsLeaderSurrounded(game, currentPhaseTeam))
+        {
+            winnerTeam = opponentTeam;
+        }
+        else if (IsLeaderCaptured(game, history, opponentTeam) ||
+                 IsLeaderSurrounded(game, opponentTeam))
+        {
+            winnerTeam = currentPhaseTeam;
+        }
+
+        return winnerTeam;
     }
 }

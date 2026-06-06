@@ -1,18 +1,15 @@
 namespace LeadersBoardGame.GameLogic.HistoryEntries.Segments;
 
+using System;
 using System.Collections.Generic;
-using LeadersBoardGame.GameLogic.Actions;
+using LeadersBoardGame.GameLogic.Entities;
 using LeadersBoardGame.GameLogic.Enums;
 
-public class Turn : IHistoryEntry, ISegment
+public class Turn : Segment, IHistoryEntry
 {
-    public TeamColor Team => throw new System.NotImplementedException();
+    public TeamColor Team { get; }
 
-    public TransitionAction StartAction => throw new System.NotImplementedException();
-
-    public TransitionAction EndAction => throw new System.NotImplementedException();
-
-    public TransitionTarget Transition => TransitionTarget.Turn;
+    public override TransitionTarget Transition => TransitionTarget.Turn;
 
     public TurnStartPhase TurnStartPhase { get; }
 
@@ -22,8 +19,9 @@ public class Turn : IHistoryEntry, ISegment
 
     public TurnEndPhase TurnEndPhase { get; }
 
-    public Turn()
+    public Turn(TeamColor team)
     {
+        Team = team;
         TurnStartPhase = new TurnStartPhase();
         ActionsPhase = new ActionsPhase();
         RecruitmentPhase = new RecruitmentPhase();
@@ -36,5 +34,33 @@ public class Turn : IHistoryEntry, ISegment
     public List<IPhase> GetPhasesInOrder()
     {
         return [TurnStartPhase, ActionsPhase, RecruitmentPhase, TurnEndPhase];
+    }
+
+    // TODO - add summary
+    public List<Segment> GetPhasesAsSegments()
+    {
+        List<Segment> segments = [];
+        foreach (IPhase phase in segments)
+        {
+            if (phase is Segment segment)
+            {
+                segments.Add(segment);
+            }
+        }
+        return segments;
+    }
+
+    // TODO - add summary
+    public Segment GetPhaseAsSegment(GamePhaseType gamePhaseType)
+    {
+        TransitionTarget transition = gamePhaseType.GetTransition(); 
+        foreach (Segment segment in GetPhasesAsSegments())
+        {
+            if (segment.Transition == transition)
+            {
+                return segment;
+            }
+        }
+        throw new InvalidOperationException($"No phase found matching {gamePhaseType} phase type");
     }
 }

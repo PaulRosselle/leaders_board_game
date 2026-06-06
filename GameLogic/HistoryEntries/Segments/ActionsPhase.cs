@@ -4,13 +4,14 @@ using System.Collections.Generic;
 using LeadersBoardGame.GameLogic.Actions;
 using LeadersBoardGame.GameLogic.Enums;
 
-public class ActionsPhase : ISegment, IPhase
+public class ActionsPhase : Segment, IPhase
 {
-    public List<IGameAction> Actions => throw new System.NotImplementedException();
+    public List<IGameAction> Actions { get; }
 
-    public TransitionAction StartAction => throw new System.NotImplementedException();
+    public override TransitionTarget Transition => TransitionTarget.ActionsPhase;
 
-    public TransitionAction EndAction => throw new System.NotImplementedException();
-
-    public TransitionTarget Transition => TransitionTarget.ActionsPhase;
+    public ActionsPhase()
+    {
+        Actions = [];
+    }
 }

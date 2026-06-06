@@ -1,6 +1,8 @@
 namespace LeadersBoardGame.GameLogic.Enums;
 
 using System;
+using System.Collections.Generic;
+
 
 public enum CharacterType
 {
@@ -51,4 +53,20 @@ public static class CharacterTypeExtension
         CharacterType.Wanderer => CharacterCard.Wanderer,
         _ => throw new InvalidOperationException($"No card found for character {characterType}"),
     };
+
+    /// <summary>
+    /// Returns every character type matching <paramref name="characterCard"/>
+    /// </summary>
+    public static List<CharacterType> GetCharacterTypesMatchingCard(CharacterCard characterCard)
+    {
+        List<CharacterType> characterTypes = [];
+        foreach (CharacterType characterType in AllCharacterTypes)
+        {
+            if (characterType.GetCharacterCard() == characterCard)
+            {
+                characterTypes.Add(characterType);
+            }
+        }
+        return characterTypes;
+    }
 }

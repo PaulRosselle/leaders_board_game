@@ -129,13 +129,13 @@ public static class BoardQuery
     }
 
     /// <summary>
-    /// Returns the cells on which a recruitment could occur
+    /// Returns the positions of cells on which a recruitment could occur
     /// </summary>
-    public static List<Cell> GetRecruitmentCells(Board board, TeamColor team)
+    public static List<Position> GetRecruitmentPositions(Board board, TeamColor team)
     {
         // The board cells are stored within a two dimensional (x,y) array with 
         // the teams recruitment cells on each limit of the Y axis.
-        List<Cell> recruitmentCells = [];
+        List<Position> recruitmentCells = [];
         for (int x = 0; x < board.Cells.Length; x++)
         {
             Cell[] column = board.Cells[x];
@@ -143,7 +143,7 @@ public static class BoardQuery
             // A recruitment cell must be empty
             if (recruitmentCell.Character is null)
             {
-                recruitmentCells.Add(recruitmentCell);
+                recruitmentCells.Add(recruitmentCell.Pos);
             }
         }
         return recruitmentCells;

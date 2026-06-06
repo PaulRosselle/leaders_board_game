@@ -20,7 +20,7 @@ public interface IGameFlowListener
     /// <summary>
     /// Fired once when the game session ends. Carries the winning team.
     /// </summary>
-    Task OnGameEnded(TeamColor winner);
+    Task OnGameEnded(Player winner);
 
     /// <summary>
     /// Fired whenever the game enters a new phase. Carries the incoming phase as context.

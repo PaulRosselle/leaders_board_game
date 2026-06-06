@@ -11,7 +11,7 @@ using LeadersBoardGame.GameLogic.Entities;
 /// </summary>
 public record InteractionRequest(
     InteractionType Type,
-    IReadOnlyList<CharacterCard> LegalCards,
-    IReadOnlyDictionary<TargetCategory, IReadOnlyList<Position>> LegalPositions,
+    IReadOnlyList<CharacterCard>? LegalCards,
+    IReadOnlyDictionary<TargetCategory, IReadOnlyList<Position>>? LegalPositions,
     IReadOnlyList<InteractionResultType> LegalResults
 );

@@ -4,15 +4,17 @@ using System.Collections.Generic;
 using LeadersBoardGame.GameLogic.Actions;
 using LeadersBoardGame.GameLogic.Enums;
 
-public class BanishmentPhase : IHistoryEntry, ISegment, IPhase
+public class BanishmentPhase : Segment, IHistoryEntry, IPhase
 {
-    public TeamColor Team => throw new System.NotImplementedException();
+    public TeamColor Team { get; }
 
-    public List<IGameAction> Actions => throw new System.NotImplementedException();
+    public List<IGameAction> Actions { get; }
 
-    public TransitionAction StartAction => throw new System.NotImplementedException();
+    public override TransitionTarget Transition => TransitionTarget.BanishmentPhase;
 
-    public TransitionAction EndAction => throw new System.NotImplementedException();
-
-    public TransitionTarget Transition => TransitionTarget.BanishmentPhase;
+    public BanishmentPhase(TeamColor team)
+    {
+        Team = team;
+        Actions = [];
+    }
 }
